@@ -1,10 +1,7 @@
 #include "Utils.hpp"
 #include <stdio.h>
 #include <stdarg.h>
-#ifdef EEMO_DEBUG
-// sadece Serial üzerinden yazdırmak istediğimizde gereklidir, bu nedenle gtests için gerekli değildir
 #include <Arduino.h>
-#endif
 
 namespace Utils
 {
@@ -25,7 +22,6 @@ namespace Utils
 
     void debug(const char *a_format, ...)
     {
-#ifdef EMO_DEBUG
         const unsigned int B_SIZE = 256;
         char buf[B_SIZE];
 
@@ -39,9 +35,5 @@ namespace Utils
         {
             Serial.println(buf);
         }
-#else
-        (a_format); // EMO_DEBUG olmadan derlendiğinde kullanılmayan
-                    // değişkenle ilgili uyarıyı önlemek için
-#endif
     }
 }
