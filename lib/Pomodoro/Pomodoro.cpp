@@ -5,7 +5,7 @@
 namespace EMO
 {
     Pomodoro::Pomodoro(UI_IF *a_ui, Button_Logic *a_b1, Button_Logic *a_b2,
-                       Eeprom_IF *a_eeprom) : the_timer_type(T_POM25), the_state(READY),
+                       Eeprom_IF *a_eeprom) : the_timer_type(T_POM20), the_state(READY),
                                               the_timer(0), the_pomodoros(0),
 
                                               the_ui(a_ui),
@@ -17,9 +17,9 @@ namespace EMO
                                               the_pom5(Const::POM_BREAK_SHORT_MIN, Const::POM_BREAK_SHORT_BEEPS),
                                               the_pom15(Const::POM_BREAK_LONG_MIN, Const::POM_BREAK_LONG_BEEPS)
     {
-        the_pom[T_POM25] = &the_pom25;
-        the_pom[T_POM5] = &the_pom5;
-        the_pom[T_POM15] = &the_pom15;
+        the_pom[T_POM20] = &the_pom25;
+        the_pom[T_POM10] = &the_pom5;
+        the_pom[T_POM30] = &the_pom15;
 
         // Pomodoroları EEPROM'dan oku
         the_pomodoros = the_eeprom->Read(Const::POM_SAVE_ADDRESS);
@@ -73,7 +73,7 @@ namespace EMO
                 // Pomodoroları EEPROM'a kaydet
                 the_eeprom->Write(Const::POM_SAVE_ADDRESS, the_pomodoros);
 
-                the_timer_type = T_POM25;
+                the_timer_type = T_POM20;
                 reset_timer();
                 Utils::debug("pomodorolar sıfırlandı");
             }
@@ -120,21 +120,21 @@ namespace EMO
         // bip sesi bitene kadar çal
         if (the_ui->Showing() == false)
         {
-            if (the_timer_type == T_POM25)
+            if (the_timer_type == T_POM20)
             {
                 the_pomodoros += 1;
                 // Pomodoroları EEPROM'a kaydet
                 the_eeprom->Write(Const::POM_SAVE_ADDRESS, the_pomodoros);
 
-                the_timer_type = T_POM5;
+                the_timer_type = T_POM10;
                 if (the_pomodoros % 4 == 0)
                 {
-                    the_timer_type = T_POM15;
+                    the_timer_type = T_POM30;
                 }
             }
             else
             {
-                the_timer_type = T_POM25;
+                the_timer_type = T_POM20;
             }
             reset_timer();
             the_state = READY;

@@ -22,9 +22,9 @@ namespace EMO
         const uint8_t PIN_D7 = 7;
 
         // pomodoro constants
-        const uint8_t POM_WORK_MIN = 25;
-        const uint8_t POM_BREAK_SHORT_MIN = 5;
-        const uint8_t POM_BREAK_LONG_MIN = 15;
+        const uint8_t POM_WORK_MIN = 20;
+        const uint8_t POM_BREAK_SHORT_MIN = 10;
+        const uint8_t POM_BREAK_LONG_MIN = 30;
 
         const uint8_t POM_WORK_BEEPS = 5;
         const uint8_t POM_BREAK_SHORT_BEEPS = 1;

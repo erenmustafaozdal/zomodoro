@@ -45,7 +45,7 @@ namespace EMO
             return the_timer.Get_Time_Left();
         }
         uint32_t Get_Time_Max_Ms() const { return the_timer.Get_Max(); }
-        bool Is_Pomodoro() const { return the_timer_type == T_POM25; }
+        bool Is_Pomodoro() const { return the_timer_type == T_POM20; }
         // </Durum arayüzü>
     private:
         /// Geçerli dönemin kısayolu.
@@ -62,9 +62,9 @@ namespace EMO
         // Pomodoro dönemlerinin türü
         enum
         {
-            T_POM25,
-            T_POM5,
-            T_POM15,
+            T_POM20,
+            T_POM10,
+            T_POM30,
 
             T_SIZE
         };
@@ -77,7 +77,7 @@ namespace EMO
             PAUSED
         };
 
-        uint8_t the_timer_type; //!< Geçerli zamanlayıcı türü (T_POM25, vb.)
+        uint8_t the_timer_type; //!< Geçerli zamanlayıcı türü (T_POM20, vb.)
         STATE the_state;
         Timer the_timer;
         uint8_t the_pomodoros; //!< Şu ana kadar yapılan pomodoro sayısı.
