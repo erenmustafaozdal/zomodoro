@@ -38,7 +38,6 @@ namespace EMO
 
     void Pomodoro::Run(uint32_t a_time)
     {
-        Utils::debug("the_state = %u", the_state);
         if (the_state == READY)
             run_ready();
         else if (the_state == RUNNING)
