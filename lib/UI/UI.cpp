@@ -111,17 +111,18 @@ namespace EMO
 
     void UI::Setup()
     {
-        uint8_t pomodoro[8] =
-            {
-                B00000,
-                B01010,
-                B11111,
-                B11111,
-                B11111,
-                B01110,
-                B00100,
-                B00000};
+        uint8_t heart1[8] = {B00000, B00000, B10000, B10000, B10000, B00000, B00000, B00000};
+        uint8_t heart2[8] = {B00000, B01000, B11000, B11000, B11000, B01000, B00000, B00000};
+        uint8_t heart3[8] = {B00000, B01000, B11100, B11100, B11100, B01100, B00100, B00000};
+        uint8_t heart4[8] = {B00000, B01010, B11110, B11110, B11110, B01110, B00100, B00000};
+        uint8_t heart5[8] = {B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000};
+        uint8_t pomodoro[8] = {B00001, B01010, B00100, B01110, B11111, B11111, B11111, B01110};
 
+        the_display.Setup_Char(CHAR_HEART1, heart1);
+        the_display.Setup_Char(CHAR_HEART2, heart2);
+        the_display.Setup_Char(CHAR_HEART3, heart3);
+        the_display.Setup_Char(CHAR_HEART4, heart4);
+        the_display.Setup_Char(CHAR_HEART5, heart5);
         the_display.Setup_Char(CHAR_POM, pomodoro);
 
         the_display.Setup();
@@ -133,12 +134,42 @@ namespace EMO
     void UI::create_progress(const State_IF &a_state)
     {
         memset(the_progress, 0, Display::BUF_SIZE);
+
+        uint8_t pomodoro_count = a_state.Get_Pomodoros();
+        uint8_t full_hearts = pomodoro_count / 5; // Tam dolu kalp sayısı
+        uint8_t remaining = pomodoro_count % 5;   // Kalan pomodoro sayısı
         uint8_t pos = 0;
-        for (pos = 0; pos < a_state.Get_Pomodoros() &&
-                      pos < Display::MAX_CHARS;
-             ++pos)
+
+        // Tam dolu kalpleri ekle
+        for (pos = 0; pos < full_hearts && pos < Display::MAX_CHARS; ++pos)
         {
-            the_progress[pos] = CHAR_POM;
+            the_progress[pos] = CHAR_HEART5; // Tam dolu kalp karakteri
+        }
+
+        // Kalan pomodoro varsa, uygun yarım dolu kalbi ekle
+        if (remaining > 0 && pos < Display::MAX_CHARS)
+        {
+            switch (remaining)
+            {
+            case 1:
+                the_progress[pos++] = CHAR_HEART1;
+                break;
+            case 2:
+                the_progress[pos++] = CHAR_HEART2;
+                break;
+            case 3:
+                the_progress[pos++] = CHAR_HEART3;
+                break;
+            case 4:
+                the_progress[pos++] = CHAR_HEART4;
+                break;
+            }
+        }
+
+        // Kalan karakterleri boşluklarla doldur
+        for (; pos < Display::MAX_CHARS; ++pos)
+        {
+            the_progress[pos] = ' ';
         }
     }
 }

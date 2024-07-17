@@ -30,7 +30,12 @@ namespace EMO
 
         enum
         {
-            CHAR_POM = 1,     //!< Pomodoro karakteri.
+            CHAR_HEART1 = 1,  //!< 1. kalp karakteri.
+            CHAR_HEART2 = 2,  //!< 2. kalp karakteri.
+            CHAR_HEART3 = 3,  //!< 3. kalp karakteri.
+            CHAR_HEART4 = 4,  //!< 4. kalp karakteri.
+            CHAR_HEART5 = 5,  //!< 5. kalp karakteri.
+            CHAR_POM = 6,     //!< Pomodoro karakteri.
             CHAR_SQUARE = 255 //!< Dolu kare karakteri.
         };
 
