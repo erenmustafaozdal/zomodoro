@@ -80,13 +80,13 @@ namespace EMO
         // display pomodoro done while playing beeper
         if (a_state.Is_Pomodoro())
         {
-            the_display.Write(0, "!ZOMODORO!");
-            the_display.Write(1, "aferin sana!");
+            the_display.Write(0, "!   ZOMODORO   !");
+            the_display.Write(1, "  Aferin sana!  ");
         }
         else
         {
-            the_display.Write(0, "mola bitti");
-            the_display.Write(1, "odaklan");
+            the_display.Write(0, "   Mola bitti   ");
+            the_display.Write(1, "    Odaklan!    ");
         }
 
         the_beeper.Update();
@@ -103,7 +103,7 @@ namespace EMO
 
     bool UI::Showing() const
     {
-        // we are done when beeper stoped.
+        // Bip sesi kesildiğinde işimiz biter.
         return the_beeper.Done() == false;
     }
 

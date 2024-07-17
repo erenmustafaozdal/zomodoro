@@ -21,10 +21,10 @@ namespace EMO
         pinMode(EMO::Const::PIN_LCD_CONTRAST, OUTPUT);   // PWM pini kullanır
 
         // 80/255 duty cycle PWM verir
-        analogWrite(EMO::Const::PIN_LCD_BRIGHTNESS, 80);
+        analogWrite(EMO::Const::PIN_LCD_BRIGHTNESS, 128);
 
         // Bu pin ile GND arasında 22uF kapasitör bulunur
-        analogWrite(EMO::Const::PIN_LCD_CONTRAST, 80);
+        analogWrite(EMO::Const::PIN_LCD_CONTRAST, 144);
     }
 
     // -------------------------------------------------------------------------
