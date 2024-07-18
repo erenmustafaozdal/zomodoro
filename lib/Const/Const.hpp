@@ -10,16 +10,26 @@ namespace EMO
         const uint8_t PIN_BEEPER = 12;
         const uint8_t PIN_B1 = 2;
         const uint8_t PIN_B2 = 3;
-        const uint8_t PIN_LCD_CONTRAST = 9;
-        const uint8_t PIN_LCD_BRIGHTNESS = 8;
 
-        // display
-        const uint8_t PIN_RS = 11;
-        const uint8_t PIN_ENABLE = 10;
-        const uint8_t PIN_D4 = 4;
-        const uint8_t PIN_D5 = 5;
-        const uint8_t PIN_D6 = 6;
-        const uint8_t PIN_D7 = 7;
+        // LCD genellikle aşağıda gösterildiği gibi etiketlenen 16 pin aracılığıyla arayüzlenir
+        //                                      // Arduino Bağlantıları
+        //                                      // LCD                              ARDUINO
+        //                                      //  1. GND - Ground                 GND
+        //                                      //  2. VDD - 3 - 5V                 5V
+        const uint8_t PIN_LCD_CONTRAST = 9; //  //  3. VO  - Contrast
+        const uint8_t PIN_RS = 11;          //  //  4. RS  - Register Select
+        //                                      //  5. RW  - Read/Write             GND
+        const uint8_t PIN_ENABLE = 10; //       //  6. E   - Enable
+        //                                      //  7. DB0 - Data Bit 0             N/A
+        //                                      //  8. DB1 - Data Bit 1             N/A
+        //                                      //  9. DB2 - Data Bit 2             N/A
+        //                                      // 10. DB3 - Data Bit 3             N/A
+        const uint8_t PIN_D4 = 4;             //// 11. DB4 - Data Bit 4
+        const uint8_t PIN_D5 = 5;             //// 12. DB5 - Data Bit 5
+        const uint8_t PIN_D6 = 6;             //// 13. DB6 - Data Bit 6
+        const uint8_t PIN_D7 = 7;             //// 14. DB7 - Data Bit 7
+        const uint8_t PIN_LCD_BRIGHTNESS = 8; //// 15. BL1 - Backlight +
+        //                                      // 16. BL2 - Backlight -            GND
 
         // pomodoro constants
         const uint8_t POM_WORK_MIN = 20;
