@@ -16,7 +16,6 @@ namespace EMO
                           a_state.Get_Current_Period_Minutes(),
                           char(CHAR_POM),
                           a_state.Get_Pomodoros());
-        return;
 
         create_progress(a_state);
         the_display.Write(1, the_progress);
@@ -36,8 +35,10 @@ namespace EMO
 
         if (a_state.Is_Pomodoro())
         {
-            if (pom < Display::MAX_CHARS) // we have space
-                the_progress[pom] = 126;  // this is the arrow char
+            // yerleşen kalplerden sonra oku ekle
+            uint8_t hearts = (pom + 4) / 5;
+            if (hearts < Display::MAX_CHARS) // eğer boşluk varsa
+                the_progress[hearts] = 126;  // sağa ok işaretini ekle
         }
         the_display.Write(1, the_progress);
     }
