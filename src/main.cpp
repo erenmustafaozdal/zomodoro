@@ -8,7 +8,7 @@
 EMO::Button the_b1(EMO::Const::PIN_B1);
 EMO::Button the_b2(EMO::Const::PIN_B2);
 EMO::Eeprom the_eeprom;
-EMO::UI the_ui;
+EMO::UI the_ui(EMO::Const::PIN_LDR);
 
 EMO::Pomodoro the_pomodoro(&the_ui, &the_b1, &the_b2, &the_eeprom);
 uint32_t the_time = 0;
@@ -23,8 +23,10 @@ void setup()
 
 void loop()
 {
+
   the_time = millis();
 
+  the_ui.UpdateBrightness(the_time);
   the_b1.Update(the_time);
   the_b2.Update(the_time);
   the_pomodoro.Run(the_time);

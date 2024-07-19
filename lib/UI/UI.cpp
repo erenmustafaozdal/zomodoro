@@ -4,7 +4,7 @@
 
 namespace EMO
 {
-    UI::UI() : the_timer(0), the_beeper(Const::PIN_BEEPER, 1)
+    UI::UI(uint8_t ldrPin) : the_timer(0), the_beeper(Const::PIN_BEEPER, 1), lightSensor(ldrPin), lastBrightnessUpdate(0), brightnessUpdateInterval(1000)
     {
     }
 
@@ -171,6 +171,23 @@ namespace EMO
         for (; pos < Display::MAX_CHARS; ++pos)
         {
             the_progress[pos] = ' ';
+        }
+    }
+
+    void UI::Set_Brightness(uint8_t brightness)
+    {
+        analogWrite(EMO::Const::PIN_LCD_BRIGHTNESS, brightness);
+    }
+
+    void UI::UpdateBrightness(unsigned long currentTime)
+    {
+        if (currentTime - lastBrightnessUpdate >= brightnessUpdateInterval)
+        {
+            uint16_t ldr_value = lightSensor.Read();
+            uint8_t brightness = map(ldr_value, 300, 800, Const::LCD_MIN_BRIGHTNESS, Const::LCD_MAX_BRIGHTNESS);
+            brightness = constrain(brightness, Const::LCD_MIN_BRIGHTNESS, Const::LCD_MAX_BRIGHTNESS);
+            Set_Brightness(brightness);
+            lastBrightnessUpdate = currentTime;
         }
     }
 }

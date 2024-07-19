@@ -5,6 +5,7 @@
 #include "Display.hpp"
 #include "Beeper.hpp"
 #include "State_IF.hpp"
+#include "LDR.hpp"
 
 namespace EMO
 {
@@ -12,7 +13,7 @@ namespace EMO
     class UI : public UI_IF
     {
     public:
-        UI();
+        UI(uint8_t ldrPin);
 
         virtual void Show_Ready(const State_IF &);
         virtual void Show_Running(const State_IF &);
@@ -23,6 +24,11 @@ namespace EMO
         virtual bool Showing() const;
 
         virtual void Setup();
+
+        // LDR'den gelen bilgiyle parlaklık ayarlar
+        void Set_Brightness(uint8_t brightness);
+        // Parlaklık güncelleme fonksiyonu
+        void UpdateBrightness(unsigned long currentTime);
 
     private:
         /// Alt satır (ilerleme) için dizeyi doldurur.
@@ -44,6 +50,10 @@ namespace EMO
         Beeper the_beeper;
         Display the_display;
         char the_progress[Display::BUF_SIZE];
+
+        LDR lightSensor; // LDR modülü
+        unsigned long lastBrightnessUpdate;
+        const unsigned long brightnessUpdateInterval;
     };
 }
 
