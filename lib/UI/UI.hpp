@@ -17,7 +17,7 @@ namespace EMO
 
         virtual void Show_Ready(const State_IF &);
         virtual void Show_Running(const State_IF &);
-        virtual void Show_Paused(const State_IF &);
+        virtual void Show_Paused(const State_IF &a_state, bool is_sound_detected = false);
         virtual void Show_Finished(const State_IF &);
 
         virtual void Set_Beeper(uint8_t);
@@ -36,13 +36,14 @@ namespace EMO
 
         enum
         {
-            CHAR_HEART1 = 1,  //!< 1. kalp karakteri.
-            CHAR_HEART2 = 2,  //!< 2. kalp karakteri.
-            CHAR_HEART3 = 3,  //!< 3. kalp karakteri.
-            CHAR_HEART4 = 4,  //!< 4. kalp karakteri.
-            CHAR_HEART5 = 5,  //!< 5. kalp karakteri.
-            CHAR_POM = 6,     //!< Pomodoro karakteri.
-            CHAR_SQUARE = 255 //!< Dolu kare karakteri.
+            CHAR_ZOMODORO = 7, //!< zomodoro karakteri.
+            CHAR_HEART1 = 1,   //!< 1. kalp karakteri.
+            CHAR_HEART2 = 2,   //!< 2. kalp karakteri.
+            CHAR_HEART3 = 3,   //!< 3. kalp karakteri.
+            CHAR_HEART4 = 4,   //!< 4. kalp karakteri.
+            CHAR_HEART5 = 5,   //!< 5. kalp karakteri.
+            CHAR_POM = 6,      //!< Pomodoro karakteri.
+            CHAR_SQUARE = 255  //!< Dolu kare karakteri.
         };
 
         uint8_t the_timer;

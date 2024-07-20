@@ -9,6 +9,7 @@
 #include "State_IF.hpp"
 #include "UI_IF.hpp"
 #include "Eeprom_IF.hpp"
+#include "SoundSensor.hpp"
 
 namespace EMO
 {
@@ -26,7 +27,7 @@ namespace EMO
     {
     public:
         Pomodoro(UI_IF *a_ui, Button_Logic *a_b1, Button_Logic *a_b2,
-                 Eeprom_IF *a_eeprom);
+                 Eeprom_IF *a_eeprom, SoundSensor *a_soundSensor);
 
         /// Bir kez çağrılır.
         void Setup();
@@ -74,8 +75,11 @@ namespace EMO
             READY,
             RUNNING,
             FINISHED,
-            PAUSED
+            PAUSED,
+            SOUND_DETECTED // Yeni durum
         };
+
+        void handle_sound_detection(uint32_t a_time);
 
         uint8_t the_timer_type; //!< Geçerli zamanlayıcı türü (T_POM20, vb.)
         STATE the_state;
@@ -86,6 +90,11 @@ namespace EMO
         Button_Logic *the_b1;
         Button_Logic *the_b2;
         Eeprom_IF *the_eeprom;
+        SoundSensor *the_soundSensor;
+        uint32_t the_start_time;
+        uint32_t the_pause_time;
+        uint32_t the_duration;
+        uint32_t the_sound_pause_time;
 
         Period the_pom25;
         Period the_pom5;

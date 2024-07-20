@@ -4,18 +4,30 @@
 
 namespace EMO
 {
-    Pomodoro::Pomodoro(UI_IF *a_ui, Button_Logic *a_b1, Button_Logic *a_b2,
-                       Eeprom_IF *a_eeprom) : the_timer_type(T_POM20), the_state(READY),
-                                              the_timer(0), the_pomodoros(0),
+    Pomodoro::Pomodoro(
+        UI_IF *a_ui,
+        Button_Logic *a_b1,
+        Button_Logic *a_b2,
+        Eeprom_IF *a_eeprom,
+        SoundSensor *a_soundSensor) : the_timer_type(T_POM20),
+                                      the_state(READY),
+                                      the_timer(0),
+                                      the_pomodoros(0),
 
-                                              the_ui(a_ui),
-                                              the_b1(a_b1),
-                                              the_b2(a_b2),
-                                              the_eeprom(a_eeprom),
+                                      the_ui(a_ui),
+                                      the_b1(a_b1),
+                                      the_b2(a_b2),
+                                      the_eeprom(a_eeprom),
+                                      the_soundSensor(a_soundSensor),
 
-                                              the_pom25(Const::POM_WORK_MIN, Const::POM_WORK_BEEPS),
-                                              the_pom5(Const::POM_BREAK_SHORT_MIN, Const::POM_BREAK_SHORT_BEEPS),
-                                              the_pom15(Const::POM_BREAK_LONG_MIN, Const::POM_BREAK_LONG_BEEPS)
+                                      the_start_time(0),
+                                      the_pause_time(0),
+                                      the_duration(0),
+                                      the_sound_pause_time(0),
+
+                                      the_pom25(Const::POM_WORK_MIN, Const::POM_WORK_BEEPS),
+                                      the_pom5(Const::POM_BREAK_SHORT_MIN, Const::POM_BREAK_SHORT_BEEPS),
+                                      the_pom15(Const::POM_BREAK_LONG_MIN, Const::POM_BREAK_LONG_BEEPS)
     {
         the_pom[T_POM20] = &the_pom25;
         the_pom[T_POM10] = &the_pom5;
@@ -32,6 +44,7 @@ namespace EMO
     void Pomodoro::Setup()
     {
         the_ui->Setup();
+        the_soundSensor->Setup();
     }
 
     // -------------------------------------------------------------------------
@@ -46,6 +59,9 @@ namespace EMO
             run_finished();
         else if (the_state == PAUSED)
             run_pause();
+        else if (the_state == SOUND_DETECTED)
+            // Ses algılandığında durumu
+            handle_sound_detection(a_time);
     }
 
     // -------------------------------------------------------------------------
@@ -108,6 +124,16 @@ namespace EMO
         {
             the_state = PAUSED;
         }
+        else
+        {
+            // Ses algılandıysa
+            if (the_soundSensor->IsSoundDetected())
+            {
+                Serial.println("Ses algılandı");
+                the_state = SOUND_DETECTED;
+                the_sound_pause_time = a_time;
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -165,6 +191,19 @@ namespace EMO
                 continue_timer();
                 the_state = RUNNING;
             }
+        }
+    }
+
+    void Pomodoro::handle_sound_detection(uint32_t a_time)
+    {
+        the_ui->Show_Paused(*this, true);
+
+        if (a_time - the_sound_pause_time >= 30000) // 30 saniye bekleme
+        {
+            // Timer'ı devam ettir
+            the_state = RUNNING;
+            the_start_time += (a_time - the_sound_pause_time);
+            continue_timer();
         }
     }
 }

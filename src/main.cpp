@@ -4,13 +4,18 @@
 #include "UI.hpp"
 #include "Pomodoro.hpp"
 #include "Eeprom.hpp"
+#include "SoundSensor.hpp"
 
 EMO::Button the_b1(EMO::Const::PIN_B1);
 EMO::Button the_b2(EMO::Const::PIN_B2);
 EMO::Eeprom the_eeprom;
 EMO::UI the_ui(EMO::Const::PIN_LDR);
+EMO::SoundSensor soundSensor(
+    EMO::Const::PIN_SOUND_SENSOR,
+    EMO::Const::SOUND_SAMPLE_TIME,
+    EMO::Const::SOUND_THRESHOLD);
 
-EMO::Pomodoro the_pomodoro(&the_ui, &the_b1, &the_b2, &the_eeprom);
+EMO::Pomodoro the_pomodoro(&the_ui, &the_b1, &the_b2, &the_eeprom, &soundSensor);
 uint32_t the_time = 0;
 
 void setup()

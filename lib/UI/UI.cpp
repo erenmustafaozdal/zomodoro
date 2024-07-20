@@ -12,7 +12,8 @@ namespace EMO
 
     void UI::Show_Ready(const State_IF &a_state)
     {
-        the_display.Write(0, "Z=%02u HAZIR   %c%02u",
+        the_display.Write(0, "%c=%02u  HAZIR  %c%02u",
+                          char(CHAR_ZOMODORO),
                           a_state.Get_Current_Period_Minutes(),
                           char(CHAR_POM),
                           a_state.Get_Pomodoros());
@@ -26,7 +27,8 @@ namespace EMO
     void UI::Show_Running(const State_IF &a_state)
     {
         uint8_t pom = a_state.Get_Pomodoros();
-        the_display.Write(0, "Z=%02u %5s   %c%02u",
+        the_display.Write(0, "%c=%02u %5s   %c%02u",
+                          char(CHAR_ZOMODORO),
                           a_state.Get_Current_Period_Minutes(),
                           Utils::ms_to_m_s(a_state.Get_Time_Left_Ms()),
                           char(CHAR_POM),
@@ -45,13 +47,14 @@ namespace EMO
 
     // -------------------------------------------------------------------------
 
-    void UI::Show_Paused(const State_IF &a_state)
+    void UI::Show_Paused(const State_IF &a_state, bool is_sound_detected)
     {
         uint8_t pom = a_state.Get_Pomodoros();
         // alternate those 2 lines
         if (the_timer < 5)
         {
-            the_display.Write(0, "Z=%02u %5s   %c%02u",
+            the_display.Write(0, "%c=%02u %5s   %c%02u",
+                              char(CHAR_ZOMODORO),
                               a_state.Get_Current_Period_Minutes(),
                               Utils::ms_to_m_s(a_state.Get_Time_Left_Ms()),
                               char(CHAR_POM),
@@ -59,7 +62,8 @@ namespace EMO
         }
         else
         {
-            the_display.Write(0, "Z=%02u %5s   %c%02u",
+            the_display.Write(0, "%c=%02u %5s   %c%02u",
+                              char(CHAR_ZOMODORO),
                               a_state.Get_Current_Period_Minutes(),
                               "",
                               char(CHAR_POM),
@@ -70,8 +74,15 @@ namespace EMO
         if (the_timer >= 10)
             the_timer = 0;
 
-        create_progress(a_state);
-        the_display.Write(1, the_progress);
+        if (is_sound_detected)
+        {
+            the_display.Write(1, "  Sessiz olun!  ");
+        }
+        else
+        {
+            create_progress(a_state);
+            the_display.Write(1, the_progress);
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -81,7 +92,7 @@ namespace EMO
         // display pomodoro done while playing beeper
         if (a_state.Is_Pomodoro())
         {
-            the_display.Write(0, "!   ZOMODORO   !");
+            the_display.Write(0, "!   %cOMODORO   !", char(CHAR_ZOMODORO));
             the_display.Write(1, "  Aferin sana!  ");
         }
         else
@@ -112,6 +123,7 @@ namespace EMO
 
     void UI::Setup()
     {
+        uint8_t zomodoro[8] = {B01111, B10001, B00010, B00100, B01000, B10001, B11110, B00000};
         uint8_t heart1[8] = {B00000, B00000, B10000, B10000, B10000, B00000, B00000, B00000};
         uint8_t heart2[8] = {B00000, B01000, B11000, B11000, B11000, B01000, B00000, B00000};
         uint8_t heart3[8] = {B00000, B01000, B11100, B11100, B11100, B01100, B00100, B00000};
@@ -119,6 +131,7 @@ namespace EMO
         uint8_t heart5[8] = {B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000};
         uint8_t pomodoro[8] = {B00001, B01010, B00100, B01110, B11111, B11111, B11111, B01110};
 
+        the_display.Setup_Char(CHAR_ZOMODORO, zomodoro);
         the_display.Setup_Char(CHAR_HEART1, heart1);
         the_display.Setup_Char(CHAR_HEART2, heart2);
         the_display.Setup_Char(CHAR_HEART3, heart3);
