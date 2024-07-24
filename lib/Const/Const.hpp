@@ -11,10 +11,10 @@ namespace EMO
         static const uint8_t PIN_BEEPER = 12;
         static const uint8_t PIN_B1 = 2;
         static const uint8_t PIN_B2 = 3;
-        static const uint8_t PIN_LDR = A0;           // LDR pini tanımı
-        static const uint8_t PIN_SOUND_SENSOR = A1;  // Ses sensörü pini tanımı
-        static const uint8_t SOUND_SAMPLE_TIME = 10; // Ses kontrolü yapılacak zaman
-        static const uint16_t SOUND_THRESHOLD = 333; // Ses eşiği
+        static const uint8_t PIN_LDR = A0;            // LDR pini tanımı
+        static const uint8_t PIN_SOUND_SENSOR = A1;   // Ses sensörü pini tanımı
+        static const uint8_t SOUND_SAMPLE_TIME = 10;  // Ses kontrolü yapılacak zaman
+        static const uint16_t SOUND_THRESHOLD = 1333; // Ses eşiği
 
         // LCD genellikle aşağıda gösterildiği gibi etiketlenen 16 pin aracılığıyla arayüzlenir
         //                                          /// Arduino Bağlantıları
