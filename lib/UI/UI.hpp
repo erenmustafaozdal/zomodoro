@@ -43,7 +43,6 @@ namespace EMO
             CHAR_HEART4 = 4,   //!< 4. kalp karakteri.
             CHAR_HEART5 = 5,   //!< 5. kalp karakteri.
             CHAR_POM = 6,      //!< Pomodoro karakteri.
-            CHAR_SQUARE = 255  //!< Dolu kare karakteri.
         };
 
         uint8_t the_timer;

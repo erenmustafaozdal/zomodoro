@@ -27,7 +27,7 @@ namespace EMO
     void UI::Show_Running(const State_IF &a_state)
     {
         uint8_t pom = a_state.Get_Pomodoros();
-        the_display.Write(0, "%c=%02u %5s   %c%02u",
+        the_display.Write(0, "%c=%02u  %5s  %c%02u",
                           char(CHAR_ZOMODORO),
                           a_state.Get_Current_Period_Minutes(),
                           Utils::ms_to_m_s(a_state.Get_Time_Left_Ms()),
@@ -53,7 +53,7 @@ namespace EMO
         // alternate those 2 lines
         if (the_timer < 5)
         {
-            the_display.Write(0, "%c=%02u %5s   %c%02u",
+            the_display.Write(0, "%c=%02u  %5s  %c%02u",
                               char(CHAR_ZOMODORO),
                               a_state.Get_Current_Period_Minutes(),
                               Utils::ms_to_m_s(a_state.Get_Time_Left_Ms()),
@@ -62,7 +62,7 @@ namespace EMO
         }
         else
         {
-            the_display.Write(0, "%c=%02u %5s   %c%02u",
+            the_display.Write(0, "%c=%02u  %5s  %c%02u",
                               char(CHAR_ZOMODORO),
                               a_state.Get_Current_Period_Minutes(),
                               "",
@@ -92,7 +92,7 @@ namespace EMO
         // display pomodoro done while playing beeper
         if (a_state.Is_Pomodoro())
         {
-            the_display.Write(0, "!   %cOMODORO   !", char(CHAR_ZOMODORO));
+            the_display.Write(0, "    %cOMODORO    ", char(CHAR_ZOMODORO));
             the_display.Write(1, "  Aferin sana!  ");
         }
         else
