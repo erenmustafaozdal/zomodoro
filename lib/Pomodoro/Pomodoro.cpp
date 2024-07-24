@@ -126,8 +126,8 @@ namespace EMO
         }
         else
         {
-            // Ses algılandıysa
-            if (the_soundSensor->IsSoundDetected())
+            // Pomodorodaysa ve Ses algılandıysa
+            if (the_timer_type == T_POM20 && the_soundSensor->IsSoundDetected())
             {
                 Serial.println("Ses algılandı");
                 the_state = SOUND_DETECTED;
