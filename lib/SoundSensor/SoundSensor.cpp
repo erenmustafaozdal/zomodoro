@@ -14,7 +14,7 @@ namespace EMO
     bool SoundSensor::IsSoundDetected()
     {
         unsigned long startTime = millis();
-        int sampleBufferValue = 0;
+        uint16_t sampleBufferValue = 0;
 
         while (millis() - startTime < sampleTime)
         {
