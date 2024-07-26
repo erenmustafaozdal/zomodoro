@@ -10,6 +10,7 @@
 #include "UI_IF.hpp"
 #include "Eeprom_IF.hpp"
 #include "SoundSensor.hpp"
+#include "LowPower.hpp"
 
 namespace EMO
 {
@@ -26,8 +27,13 @@ namespace EMO
     class Pomodoro : public State_IF
     {
     public:
-        Pomodoro(UI_IF *a_ui, Button_Logic *a_b1, Button_Logic *a_b2,
-                 Eeprom_IF *a_eeprom, SoundSensor *a_soundSensor);
+        Pomodoro(
+            UI_IF *a_ui,
+            Button_Logic *a_b1,
+            Button_Logic *a_b2,
+            Eeprom_IF *a_eeprom,
+            SoundSensor *a_soundSensor,
+            LowPowerManager *a_lowPowerManager);
 
         /// Bir kez çağrılır.
         void Setup();
@@ -91,6 +97,8 @@ namespace EMO
         Button_Logic *the_b2;
         Eeprom_IF *the_eeprom;
         SoundSensor *the_soundSensor;
+        LowPowerManager *the_lowPowerManager;
+
         uint32_t the_start_time;
         uint32_t the_pause_time;
         uint32_t the_duration;

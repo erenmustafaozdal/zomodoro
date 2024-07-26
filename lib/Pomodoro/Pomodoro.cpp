@@ -9,25 +9,27 @@ namespace EMO
         Button_Logic *a_b1,
         Button_Logic *a_b2,
         Eeprom_IF *a_eeprom,
-        SoundSensor *a_soundSensor) : the_timer_type(T_POM20),
-                                      the_state(READY),
-                                      the_timer(0),
-                                      the_pomodoros(0),
+        SoundSensor *a_soundSensor,
+        LowPowerManager *a_lowPowerManager) : the_timer_type(T_POM20),
+                                              the_state(READY),
+                                              the_timer(0),
+                                              the_pomodoros(0),
 
-                                      the_ui(a_ui),
-                                      the_b1(a_b1),
-                                      the_b2(a_b2),
-                                      the_eeprom(a_eeprom),
-                                      the_soundSensor(a_soundSensor),
+                                              the_ui(a_ui),
+                                              the_b1(a_b1),
+                                              the_b2(a_b2),
+                                              the_eeprom(a_eeprom),
+                                              the_soundSensor(a_soundSensor),
+                                              the_lowPowerManager(a_lowPowerManager),
 
-                                      the_start_time(0),
-                                      the_pause_time(0),
-                                      the_duration(0),
-                                      the_sound_pause_time(0),
+                                              the_start_time(0),
+                                              the_pause_time(0),
+                                              the_duration(0),
+                                              the_sound_pause_time(0),
 
-                                      the_pom25(Const::POM_WORK_MIN, Const::POM_WORK_BEEPS),
-                                      the_pom5(Const::POM_BREAK_SHORT_MIN, Const::POM_BREAK_SHORT_BEEPS),
-                                      the_pom15(Const::POM_BREAK_LONG_MIN, Const::POM_BREAK_LONG_BEEPS)
+                                              the_pom25(Const::POM_WORK_MIN, Const::POM_WORK_BEEPS),
+                                              the_pom5(Const::POM_BREAK_SHORT_MIN, Const::POM_BREAK_SHORT_BEEPS),
+                                              the_pom15(Const::POM_BREAK_LONG_MIN, Const::POM_BREAK_LONG_BEEPS)
     {
         the_pom[T_POM20] = &the_pom25;
         the_pom[T_POM10] = &the_pom5;
@@ -62,6 +64,12 @@ namespace EMO
         else if (the_state == SOUND_DETECTED)
             // Ses algılandığında durumu
             handle_sound_detection(a_time);
+
+        // LowPower modunu yönet
+        if (the_b1->Pressed() || the_b2->Pressed())
+        {
+            the_lowPowerManager->ExitLowPower();
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -105,6 +113,9 @@ namespace EMO
                 the_state = RUNNING;
             }
         }
+
+        // LowPower moduna geçişi kontrol et
+        the_lowPowerManager->CheckLowPower();
     }
 
     // -------------------------------------------------------------------------
@@ -119,10 +130,12 @@ namespace EMO
         if (the_timer.Elapsed())
         {
             the_state = FINISHED;
+            the_lowPowerManager->ExitLowPower();
         }
         else if (the_b2->Released())
         {
             the_state = PAUSED;
+            the_lowPowerManager->ExitLowPower();
         }
         else
         {
@@ -192,6 +205,9 @@ namespace EMO
                 the_state = RUNNING;
             }
         }
+
+        // LowPower moduna geçişi kontrol et
+        the_lowPowerManager->CheckLowPower();
     }
 
     void Pomodoro::handle_sound_detection(uint32_t a_time)
