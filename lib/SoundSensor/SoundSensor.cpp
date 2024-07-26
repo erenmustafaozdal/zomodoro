@@ -24,8 +24,8 @@ namespace EMO
             }
         }
 
-        Serial.print("sampleBufferValue: ");
-        Serial.println(sampleBufferValue);
+        // Serial.print("sampleBufferValue: ");
+        // Serial.println(sampleBufferValue);
         return sampleBufferValue > soundThreshold;
     }
 }
