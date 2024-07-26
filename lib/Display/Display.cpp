@@ -23,7 +23,7 @@ namespace EMO
         // 80/255 duty cycle PWM verir
         analogWrite(EMO::Const::PIN_LCD_BRIGHTNESS, EMO::Const::LCD_MIN_BRIGHTNESS);
 
-        analogWrite(EMO::Const::PIN_LCD_CONTRAST, 100);
+        analogWrite(EMO::Const::PIN_LCD_CONTRAST, 128);
     }
 
     // -------------------------------------------------------------------------
