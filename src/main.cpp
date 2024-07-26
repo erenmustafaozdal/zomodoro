@@ -5,6 +5,7 @@
 #include "Pomodoro.hpp"
 #include "Eeprom.hpp"
 #include "SoundSensor.hpp"
+#include "PIRSensor.hpp"
 #include "LowPower.hpp"
 
 EMO::Button the_b1(EMO::Const::PIN_B1);
@@ -15,7 +16,8 @@ EMO::SoundSensor soundSensor(
     EMO::Const::PIN_SOUND_SENSOR,
     EMO::Const::SOUND_SAMPLE_TIME,
     EMO::Const::SOUND_THRESHOLD);
-EMO::LowPowerManager the_lowPowerManager(EMO::Const::LOW_POWER_TIMEOUT_MS);
+EMO::PIRSensor pirSensor(EMO::Const::PIN_PIR_SENSOR);
+EMO::LowPowerManager the_lowPowerManager(EMO::Const::LOW_POWER_TIMEOUT_MS, &pirSensor);
 
 EMO::Pomodoro the_pomodoro(
     &the_ui,

@@ -2,13 +2,15 @@
 #define LOW_POWER_HPP
 
 #include <LowPower.h>
+#include <PinChangeInterrupt.h>
+#include "PIRSensor.hpp"
 
 namespace EMO
 {
     class LowPowerManager
     {
     public:
-        LowPowerManager(unsigned long timeoutMiliseconds);
+        LowPowerManager(unsigned long timeoutMiliseconds, PIRSensor *a_pirSensor);
 
         void CheckLowPower();
         void ExitLowPower();
@@ -16,6 +18,7 @@ namespace EMO
     private:
         unsigned long timeoutMillis;
         unsigned long lastActivityTime;
+        PIRSensor *the_pirSensor;
     };
 
     // Kesme fonksiyonu bildirimi

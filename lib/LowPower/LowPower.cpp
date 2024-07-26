@@ -4,13 +4,19 @@
 
 namespace EMO
 {
-    LowPowerManager::LowPowerManager(unsigned long timeoutMiliseconds)
-        : timeoutMillis(timeoutMiliseconds),
-          lastActivityTime(millis())
+    LowPowerManager::LowPowerManager(
+        unsigned long timeoutMiliseconds,
+        PIRSensor *a_pirSensor) : timeoutMillis(timeoutMiliseconds),
+                                  lastActivityTime(millis()),
+                                  the_pirSensor(a_pirSensor)
     {
+        // Hareket sensörünün ayarlarını tamamla
+        the_pirSensor->Setup();
+
         // Buton pinlerine kesme atama
-        attachInterrupt(digitalPinToInterrupt(EMO::Const::PIN_B1), wakeUp, RISING);
-        attachInterrupt(digitalPinToInterrupt(EMO::Const::PIN_B2), wakeUp, RISING);
+        attachPCINT(digitalPinToPCINT(EMO::Const::PIN_PIR_SENSOR), wakeUp, CHANGE);
+        attachPCINT(digitalPinToPCINT(EMO::Const::PIN_B1), wakeUp, RISING);
+        attachPCINT(digitalPinToPCINT(EMO::Const::PIN_B2), wakeUp, RISING);
     }
 
     void LowPowerManager::CheckLowPower()
