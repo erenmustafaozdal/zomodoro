@@ -123,6 +123,10 @@ namespace EMO
 
     void UI::Setup()
     {
+        // LCD ekranı başlatmadan önce bir gecikme
+        delay(100); // 100 ms gecikme
+
+        // LCD ekranın başlatılması ve karakterlerin yüklenmesi
         uint8_t zomodoro[8] = {B01111, B10001, B00010, B00100, B01000, B10001, B11110, B00000};
         uint8_t heart1[8] = {B00000, B00000, B10000, B10000, B10000, B00000, B00000, B00000};
         uint8_t heart2[8] = {B00000, B01000, B11000, B11000, B11000, B01000, B00000, B00000};
@@ -132,12 +136,19 @@ namespace EMO
         uint8_t pomodoro[8] = {B00001, B01010, B00100, B01110, B11111, B11111, B11111, B01110};
 
         the_display.Setup_Char(CHAR_ZOMODORO, zomodoro);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_HEART1, heart1);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_HEART2, heart2);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_HEART3, heart3);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_HEART4, heart4);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_HEART5, heart5);
+        delay(50); // 50 ms gecikme
         the_display.Setup_Char(CHAR_POM, pomodoro);
+        delay(50); // 50 ms gecikme
 
         the_display.Setup();
         the_beeper.Setup();
