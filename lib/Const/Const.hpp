@@ -52,9 +52,6 @@ namespace EMO
 
         // Pomodoroları kaydetmek için eeprom adresi
         static const int POM_SAVE_ADDRESS = 0;
-
-        // LowPower ile uyku moduna geçiş için beklenecek süre (milisaniye)
-        static const uint32_t LOW_POWER_TIMEOUT_MS = 60000; // 1 dakika
     }
 }
 
