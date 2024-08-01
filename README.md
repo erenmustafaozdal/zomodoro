@@ -21,6 +21,7 @@ Zomodoro, kızım Zeynep için özel olarak tasarlamış bir pomodoro zamanlayı
 - **LCD Ekran:** Zamanlayıcı durumu, süre bilgisi ve diğer bilgileri görüntüler.
 - **LDR Işık Sensörü:** LCD ekranın parlaklığını ışık seviyesine göre ayarlama.
 - **Pomodoro Sayısı:** Yapılan pomodoro sayısını kaydeder ve ekranda gösterir. Her 5 pomodoro bir kalp (❤️) eder. Pomodoro sayısı kalpler ile ilerleme çubuğu olarak LCD ekranın ikinci satırında da gösterilir.
+- **Ses Sensörü:** Zamanlayıcı esnasında ses yapılırsa (örneğin konuşulursa); LCD ekranın ikinci satırında "Sessiz olun!" yazısı çıkar ve zamanlayıcı 30 saniye durdurulur.
 
 ## Donanım Gereksinimleri
 
