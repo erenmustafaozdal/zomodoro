@@ -3,3 +3,5 @@
 "U2",1," LCD 16 x 2"
 "S2, S1",2," Basmalı Buton"
 "PIEZO1",1," Piezo"
+"R1",1," Fotorezistör"
+"R2",1,"10 kΩ Direnç"
