@@ -52,6 +52,7 @@ Zomodoro, kızım Zeynep için özel olarak tasarlamış bir pomodoro zamanlayı
    git clone https://github.com/erenmustafaozdal/zomodoro.git
    ```
 3. **Bağlantıları Yapın:** Yukarıda belirtilen donanım bileşenlerini [./doc](https://github.com/erenmustafaozdal/zomodoro/tree/master/doc) klasöründe yer alan devre şemasına göre Arduino Nano'ya bağlayın.
+   ![Devre şeması](doc/zomodoro-circuit-view.png)
 4. **PlatformIO Projesini Açın:** PlatformIO IDE'yi açın ve indirdiğiniz proje klasörünü seçin.
 5. **Kütüphaneleri Kurun:** platformio.ini dosyasındaki kütüphaneleri kurun. PlatformIO otomatik olarak eksik kütüphaneleri yükleyecektir.
 6. **Kodu Yükleyin:** Aşağıdaki komut ile kodu Arduino'ya yükleyin.
