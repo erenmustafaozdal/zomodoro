@@ -11,6 +11,7 @@ Zomodoro, kızım Zeynep için özel olarak tasarlamış bir pomodoro zamanlayı
 - [Kullanım](#kullanım)
 - [Katkıda Bulunma](#katkıda-bulunma)
 - [Lisans](#lisans)
+- [Demo](#demo)
 
 ## Özellikler
 
@@ -84,3 +85,7 @@ Katkıda bulunmak için lütfen aşağıdaki adımları izleyin:
 ## Lisans
 
 Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için [LICENSE](https://github.com/erenmustafaozdal/zomodoro/blob/master/LICENSE) dosyasına bakın.
+
+## Demo
+
+https://github.com/user-attachments/assets/dc259c37-99fc-435b-b7c4-00ff2f2d4342
