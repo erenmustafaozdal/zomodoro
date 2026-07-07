@@ -135,6 +135,8 @@ namespace EMO
 
                 the_timer_type = T_POM20;
                 reset_timer();
+                the_b2->Reset(); // Buton durumunu sıfırla ki ardışık tetiklenmesin
+                the_ui->Set_Beeper(1); // Sıfırlandığına dair sesli onay ver
                 Utils::debug("pomodorolar sıfırlandı");
             }
         }
