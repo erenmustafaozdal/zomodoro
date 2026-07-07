@@ -82,20 +82,32 @@ namespace EMO
         lcd.setCursor(48, 38);
         lcd.print(Utils::ms_to_m_s(left));
 
-        // 3. Alt Kısımda Pomodoro Kalplerinin Gösterilmesi
+        // 3. Alt Kısım Gösterimi (Çalışmada kalpler, molada mola metinleri)
         lcd.setFont(); // Standart fonta geri dön
+        lcd.setTextSize(1);
+        lcd.setTextColor(SSD1306_WHITE);
         lcd.setCursor(4, 52);
-        lcd.print("Kalpler:");
 
-        uint8_t pomodoros = a_state.Get_Pomodoros();
-        // 1 tamamlanan pomodoro = 1 dolu küçük kalp (Zeynep için ödüllendirme odaklı)
-        uint8_t hearts_to_show = pomodoros;
-        if (hearts_to_show > 5) {
-            hearts_to_show = 5;
+        if (a_state.Is_Pomodoro())
+        {
+            lcd.print("Kalpler:");
+            uint8_t pomodoros = a_state.Get_Pomodoros();
+            uint8_t hearts_to_show = pomodoros;
+            if (hearts_to_show > 5) {
+                hearts_to_show = 5;
+            }
+            for (uint8_t i = 0; i < hearts_to_show; ++i) {
+                int16_t hx = 56 + (i * 14);
+                drawSmallHeart(hx, 51, 5); // Hepsi tam dolu kalp
+            }
         }
-        for (uint8_t i = 0; i < hearts_to_show; ++i) {
-            int16_t hx = 56 + (i * 14);
-            drawSmallHeart(hx, 51, 5); // Hepsi tam dolu kalp
+        else
+        {
+            if (a_state.Get_Current_Period_Minutes() == 10) {
+                lcd.print("KISA MOLA");
+            } else {
+                lcd.print("UZUN MOLA");
+            }
         }
 
         lcd.display();
@@ -153,19 +165,32 @@ namespace EMO
                 lcd.print(Utils::ms_to_m_s(left));
             }
 
-            // Alt Kısımda Pomodoro Kalplerinin Gösterilmesi
+            // Alt Kısım Gösterimi (Çalışmada kalpler, molada mola metinleri)
             lcd.setFont(); // Standart fonta geri dön
+            lcd.setTextSize(1);
+            lcd.setTextColor(SSD1306_WHITE);
             lcd.setCursor(4, 52);
-            lcd.print("Kalpler:");
 
-            uint8_t pomodoros = a_state.Get_Pomodoros();
-            uint8_t hearts_to_show = pomodoros;
-            if (hearts_to_show > 5) {
-                hearts_to_show = 5;
+            if (a_state.Is_Pomodoro())
+            {
+                lcd.print("Kalpler:");
+                uint8_t pomodoros = a_state.Get_Pomodoros();
+                uint8_t hearts_to_show = pomodoros;
+                if (hearts_to_show > 5) {
+                    hearts_to_show = 5;
+                }
+                for (uint8_t i = 0; i < hearts_to_show; ++i) {
+                    int16_t hx = 56 + (i * 14);
+                    drawSmallHeart(hx, 51, 5); // Hepsi tam dolu kalp
+                }
             }
-            for (uint8_t i = 0; i < hearts_to_show; ++i) {
-                int16_t hx = 56 + (i * 14);
-                drawSmallHeart(hx, 51, 5); // Hepsi tam dolu kalp
+            else
+            {
+                if (a_state.Get_Current_Period_Minutes() == 10) {
+                    lcd.print("KISA MOLA");
+                } else {
+                    lcd.print("UZUN MOLA");
+                }
             }
         }
 
