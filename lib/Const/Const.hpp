@@ -8,13 +8,17 @@ namespace EMO
 {
     namespace Const
     {
-        static const uint8_t PIN_BEEPER = 12;
-        static const uint8_t PIN_B1 = 2;
-        static const uint8_t PIN_B2 = 3;
+        static const uint8_t PIN_BEEPER = D12;
+        static const uint8_t PIN_B1 = D0;
+        static const uint8_t PIN_B2 = D1;
         static const uint8_t PIN_LDR = A0;            // LDR pini tanımı
         static const uint8_t PIN_SOUND_SENSOR = A1;   // Ses sensörü pini tanımı
-        static const uint8_t SOUND_SAMPLE_TIME = 10;  // Ses kontrolü yapılacak zaman
-        static const uint16_t SOUND_THRESHOLD = 1333; // Ses eşiği
+        static const uint8_t SOUND_SAMPLE_TIME = 10;  // Ses kontrolü yapılacak zaman (ms)
+        static const uint16_t SOUND_THRESHOLD = 1333; // Varsayılan Ses eşiği
+
+        // Kalibre edilen ses eşiğinin kaydedileceği eeprom adresleri (16-bit)
+        static const int SOUND_THRESHOLD_ADDR_HIGH = 1;
+        static const int SOUND_THRESHOLD_ADDR_LOW = 2;
 
         // LCD genellikle aşağıda gösterildiği gibi etiketlenen 16 pin aracılığıyla arayüzlenir
         //                                          /// Arduino Bağlantıları
@@ -45,9 +49,9 @@ namespace EMO
         static const uint8_t POM_BREAK_SHORT_MIN = 10;
         static const uint8_t POM_BREAK_LONG_MIN = 30;
 
-        static const uint8_t POM_WORK_BEEPS = 11;
-        static const uint8_t POM_BREAK_SHORT_BEEPS = 5;
-        static const uint8_t POM_BREAK_LONG_BEEPS = 7;
+        static const uint8_t POM_WORK_BEEPS = 10;
+        static const uint8_t POM_BREAK_SHORT_BEEPS = 10;
+        static const uint8_t POM_BREAK_LONG_BEEPS = 10;
 
         // Pomodoroları kaydetmek için eeprom adresi
         static const int POM_SAVE_ADDRESS = 0;

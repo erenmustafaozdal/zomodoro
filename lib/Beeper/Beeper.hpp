@@ -27,14 +27,27 @@ namespace EMO
         {
             if (!Done())
             {
-                digitalWrite(the_pin, (the_cycle & 1) ? LOW : HIGH);
-                the_cycle += 1;
+                // Bip seslerinin stabil ve net olması için millis() kullanıyoruz (her faz 250ms)
+                uint32_t elapsed = millis() - the_start_time;
+                uint32_t cycle_idx = elapsed / 250;
+                
+                if (cycle_idx >= (the_max_beeps << 1))
+                {
+                    the_cycle = the_max_beeps << 1;
+                    digitalWrite(the_pin, LOW);
+                }
+                else
+                {
+                    digitalWrite(the_pin, (cycle_idx & 1) ? LOW : HIGH);
+                    the_cycle = cycle_idx;
+                }
             }
         }
 
         void Reset(uint16_t a_max_beeps = 0)
         {
             the_cycle = 0;
+            the_start_time = millis();
             if (a_max_beeps > 0)
             {
                 the_max_beeps = a_max_beeps;
@@ -46,6 +59,7 @@ namespace EMO
         uint8_t the_pin;        //!< Kullanılan dijital giriş.
         uint16_t the_cycle;     //!< Update() çağrılarının sayısını tutar.
         uint16_t the_max_beeps; //!< Maksimum 'beep' sayısını tutar.
+        uint32_t the_start_time;//!< Başlangıç zamanı.
     };
 }
 

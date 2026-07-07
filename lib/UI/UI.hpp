@@ -17,8 +17,9 @@ namespace EMO
 
         virtual void Show_Ready(const State_IF &);
         virtual void Show_Running(const State_IF &);
-        virtual void Show_Paused(const State_IF &a_state, bool is_sound_detected = false);
-        virtual void Show_Finished(const State_IF &);
+        virtual void Show_Paused(const State_IF &a_state, bool is_sound_detected = false) override;
+        virtual void Show_Finished(const State_IF &) override;
+        virtual void Show_Calibrating(const State_IF &, uint32_t elapsed_ms) override;
 
         virtual void Set_Beeper(uint8_t);
         virtual bool Showing() const;
@@ -31,25 +32,20 @@ namespace EMO
         void UpdateBrightness(unsigned long currentTime);
 
     private:
-        /// Alt satır (ilerleme) için dizeyi doldurur.
-        void create_progress(const State_IF &);
-
-        enum
-        {
-            CHAR_ZOMODORO = 7, //!< zomodoro karakteri.
-            CHAR_HEART1 = 1,   //!< 1. kalp karakteri.
-            CHAR_HEART2 = 2,   //!< 2. kalp karakteri.
-            CHAR_HEART3 = 3,   //!< 3. kalp karakteri.
-            CHAR_HEART4 = 4,   //!< 4. kalp karakteri.
-            CHAR_HEART5 = 5,   //!< 5. kalp karakteri.
-            CHAR_POM = 6,      //!< Pomodoro karakteri.
-        };
+        // OLED Çizim Yardımcıları
+        void drawHeader(const State_IF &a_state);
+        void drawBattery(int16_t x, int16_t y);
+        void drawSmallHeart(int16_t x, int16_t y, uint8_t fill_level);
+        void drawClippedHeart(int16_t x, int16_t y, uint8_t fill_pct);
+        bool is_heart_filled_pixel(int16_t col, int16_t row);
+        void drawTomato(int16_t x, int16_t y);
+        void drawPause(int16_t x, int16_t y);
+        void drawShush(int16_t x, int16_t y);
 
         uint8_t the_timer;
 
         Beeper the_beeper;
         Display the_display;
-        char the_progress[Display::BUF_SIZE];
 
         LDR lightSensor; // LDR modülü
         unsigned long lastBrightnessUpdate;

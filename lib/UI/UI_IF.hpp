@@ -18,6 +18,7 @@ namespace EMO
         virtual void Show_Running(const State_IF &) = 0;
         virtual void Show_Paused(const State_IF &, bool is_sound_detected = false) = 0;
         virtual void Show_Finished(const State_IF &) = 0;
+        virtual void Show_Calibrating(const State_IF &, uint32_t elapsed_ms) = 0;
 
         /// UI nesnesinin beeper'ını ayarlar.
         virtual void Set_Beeper(uint8_t) = 0;
