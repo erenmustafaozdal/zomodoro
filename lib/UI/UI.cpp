@@ -200,12 +200,12 @@ namespace EMO
                 // Normal kalp
                 lcd.drawBitmap(48, 20, Icons::heart_filled, 32, 32, SSD1306_WHITE);
             } else if (pulse_scale == 1) {
-                // Biraz daha büyük çizim simülasyonu
-                lcd.drawBitmap(46, 18, Icons::heart_filled, 32, 32, SSD1306_WHITE);
-                lcd.drawRoundRect(44, 16, 36, 36, 4, SSD1306_WHITE);
+                // Biraz daha büyük çizim simülasyonu (çerçeve ile)
+                lcd.drawBitmap(48, 20, Icons::heart_filled, 32, 32, SSD1306_WHITE);
+                lcd.drawRoundRect(46, 18, 36, 36, 4, SSD1306_WHITE);
             } else {
-                // Küçük kalp çizimi
-                lcd.drawBitmap(52, 24, Icons::heart_outline, 32, 32, SSD1306_WHITE);
+                // Küçük kalp çizimi (merkezde kalacak şekilde outline)
+                lcd.drawBitmap(48, 20, Icons::heart_outline, 32, 32, SSD1306_WHITE);
             }
 
             lcd.setCursor(24, 54);
@@ -358,25 +358,8 @@ namespace EMO
     {
         Adafruit_SSD1306 &lcd = the_display.GetLcd();
         
-        // 1. Dış Çerçeveyi (Outline) Dinamik Olarak Çiz
-        // heart_filled maskesinin dış sınırlarını bularak pürüzsüz çerçeve çiziyoruz.
-        for (int16_t row = 0; row < 32; ++row)
-        {
-            for (int16_t col = 0; col < 32; ++col)
-            {
-                if (is_heart_filled_pixel(col, row))
-                {
-                    // Çevresindeki komşulardan en az biri boşsa bu bir kenar pikselidir.
-                    if (!is_heart_filled_pixel(col - 1, row) ||
-                        !is_heart_filled_pixel(col + 1, row) ||
-                        !is_heart_filled_pixel(col, row - 1) ||
-                        !is_heart_filled_pixel(col, row + 1))
-                    {
-                        lcd.drawPixel(x + col, y + row, SSD1306_WHITE);
-                    }
-                }
-            }
-        }
+        // 1. Dış Çerçeveyi (Outline) Çiz (CPU yükünü azaltmak için statik bitmap kullanıyoruz)
+        lcd.drawBitmap(x, y, Icons::heart_outline, 32, 32, SSD1306_WHITE);
 
         // 2. Doluluk oranına göre (0-100) aşağıdan yukarıya doğru doldur
         if (fill_pct > 100)
@@ -457,6 +440,9 @@ namespace EMO
         lcd.setCursor(4, 4);
         lcd.print("ZOMODORO");
 
+        // Orta kısım: Pil göstergesi
+        drawBattery(76, 4);
+
         // Sağ taraf: Domates İkonu + Pomodoro Sayısı
         drawTomato(96, 1);
         lcd.setCursor(110, 4);
@@ -465,5 +451,34 @@ namespace EMO
 
         // Yatay Ayırıcı Çizgi
         lcd.drawFastHLine(0, 14, 128, SSD1306_WHITE);
+    }
+
+    void UI::drawBattery(int16_t x, int16_t y)
+    {
+        Adafruit_SSD1306 &lcd = the_display.GetLcd();
+        
+        // Pil voltajını oku (A8 batarya voltaj bölücüsüne bağlı)
+        uint16_t val = analogRead(A8);
+        
+        // Pil dış gövdesi (12x7 piksel)
+        lcd.drawRect(x, y, 12, 7, SSD1306_WHITE);
+        // Pil başı (+ kutbu)
+        lcd.drawFastVLine(x + 12, y + 2, 3, SSD1306_WHITE);
+        
+        // Voltaj seviyesine göre barları doldur (10-bit üzerinden: dolu ~650, kritik ~500)
+        if (val >= 600) {
+            // Dolu (3 bar)
+            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
+            lcd.fillRect(x + 5, y + 2, 2, 3, SSD1306_WHITE);
+            lcd.fillRect(x + 8, y + 2, 2, 3, SSD1306_WHITE);
+        } else if (val >= 550) {
+            // Orta (2 bar)
+            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
+            lcd.fillRect(x + 5, y + 2, 2, 3, SSD1306_WHITE);
+        } else if (val >= 510) {
+            // Düşük (1 bar)
+            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
+        }
+        // val < 510 ise boş kalacaktır
     }
 }

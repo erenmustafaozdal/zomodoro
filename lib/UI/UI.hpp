@@ -34,6 +34,7 @@ namespace EMO
     private:
         // OLED Çizim Yardımcıları
         void drawHeader(const State_IF &a_state);
+        void drawBattery(int16_t x, int16_t y);
         void drawSmallHeart(int16_t x, int16_t y, uint8_t fill_level);
         void drawClippedHeart(int16_t x, int16_t y, uint8_t fill_pct);
         bool is_heart_filled_pixel(int16_t col, int16_t row);
