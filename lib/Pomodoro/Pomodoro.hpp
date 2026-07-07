@@ -56,10 +56,11 @@ namespace EMO
         /// Geçerli dönemin kısayolu.
         const Period &p() { return *the_pom[the_timer_type]; }
 
-        void run_ready();
+        void run_ready(uint32_t a_time);
         void run_running(uint32_t a_time);
         void run_finished();
         void run_pause();
+        void run_calibrating(uint32_t a_time);
 
         void reset_timer() { the_timer.Reset(p().Get_Time_In_Ms()); }
         void continue_timer() { the_timer.Reset(the_timer.Get_Time_Left()); }
@@ -80,7 +81,8 @@ namespace EMO
             RUNNING,
             FINISHED,
             PAUSED,
-            SOUND_DETECTED // Yeni durum
+            SOUND_DETECTED,
+            CALIBRATING
         };
 
         void handle_sound_detection(uint32_t a_time);
@@ -96,14 +98,17 @@ namespace EMO
         Eeprom_IF *the_eeprom;
         SoundSensor *the_soundSensor;
 
-        uint32_t the_start_time;
         uint32_t the_pause_time;
         uint32_t the_duration;
         uint32_t the_sound_pause_time;
+        uint32_t the_calib_start_time;
+        uint16_t the_max_detected_noise;
+        uint32_t the_last_button_activity_time;
+        uint8_t the_sound_trigger_count;
 
-        Period the_pom25;
-        Period the_pom5;
-        Period the_pom15;
+        Period the_pom_work;
+        Period the_pom_break_short;
+        Period the_pom_break_long;
         Period *the_pom[T_SIZE];
     };
 }
