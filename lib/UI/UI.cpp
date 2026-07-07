@@ -411,14 +411,15 @@ namespace EMO
         }
 
         // 3. Kum Saati / Damlama Animasyonu
-        // Kalbin üst ortasından (col=15, row=4) sıvı seviyesine (start_row) saniyede bir düşen damla
+        // Kalbin üst ortasından (col=15, row=4) sıvı seviyesine (ya da kalbin alt ucu y=26'ya) düşen damla
         if (fill_pct < 100 && start_row > 4)
         {
             uint32_t period = 1000;
             uint32_t phase = millis() % period;
-            int16_t drop_y = 4 + (phase * (start_row - 4)) / period;
+            int16_t target_row = (start_row < 26) ? start_row : 26;
+            int16_t drop_y = 4 + (phase * (target_row - 4)) / period;
             
-            if (drop_y < start_row)
+            if (drop_y < target_row)
             {
                 lcd.drawPixel(x + 15, y + drop_y, SSD1306_WHITE);
                 // Bir piksel arkasından iz bırakması için hafif kuyruk ekleyelim
