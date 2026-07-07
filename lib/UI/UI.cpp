@@ -24,11 +24,17 @@ namespace EMO
         // Aktif Mod
         lcd.setCursor(4, 18);
         if (a_state.Is_Pomodoro()) {
-            lcd.print("Calisma (20 dk)");
-        } else if (a_state.Get_Current_Period_Minutes() == 10) {
-            lcd.print("Kisa Mola (10 dk)");
+            lcd.print("Calisma (");
+            lcd.print(Const::POM_WORK_MIN);
+            lcd.print(" dk)");
+        } else if (a_state.Get_Current_Period_Minutes() == Const::POM_BREAK_SHORT_MIN) {
+            lcd.print("Kisa Mola (");
+            lcd.print(Const::POM_BREAK_SHORT_MIN);
+            lcd.print(" dk)");
         } else {
-            lcd.print("Uzun Mola (30 dk)");
+            lcd.print("Uzun Mola (");
+            lcd.print(Const::POM_BREAK_LONG_MIN);
+            lcd.print(" dk)");
         }
 
         // Tamamlanan Pomodoro Kalpleri
@@ -103,7 +109,7 @@ namespace EMO
         }
         else
         {
-            if (a_state.Get_Current_Period_Minutes() == 10) {
+            if (a_state.Get_Current_Period_Minutes() == Const::POM_BREAK_SHORT_MIN) {
                 lcd.print("KISA MOLA");
             } else {
                 lcd.print("UZUN MOLA");
@@ -186,7 +192,7 @@ namespace EMO
             }
             else
             {
-                if (a_state.Get_Current_Period_Minutes() == 10) {
+                if (a_state.Get_Current_Period_Minutes() == Const::POM_BREAK_SHORT_MIN) {
                     lcd.print("KISA MOLA");
                 } else {
                     lcd.print("UZUN MOLA");
@@ -217,7 +223,7 @@ namespace EMO
 
         if (a_state.Is_Pomodoro())
         {
-            lcd.setCursor(32, 4);
+            lcd.setCursor(19, 4); // "POMODORO BITTi!" 15 karakter (90px) -> (128-90)/2 = 19
             lcd.print("POMODORO BITTi!");
             
             // Kalbi çiz
@@ -233,19 +239,19 @@ namespace EMO
                 lcd.drawBitmap(48, 20, Icons::heart_outline, 32, 32, SSD1306_WHITE);
             }
 
-            lcd.setCursor(24, 54);
+            lcd.setCursor(7, 54); // "Aferin sana Zeynep!" 19 karakter (114px) -> (128-114)/2 = 7
             lcd.print("Aferin sana Zeynep!");
         }
         else
         {
-            lcd.setCursor(32, 4);
+            lcd.setCursor(31, 4); // "Mola Bitti!" 11 karakter (66px) -> (128-66)/2 = 31
             lcd.print("Mola Bitti!");
 
             // Domates ikonu göster
             lcd.drawBitmap(56, 20, Icons::tomato, 16, 16, SSD1306_WHITE);
 
-            lcd.setCursor(36, 44);
-            lcd.print("Odaklanma zamani");
+            lcd.setCursor(13, 48); // "Odaklanma zamani!" 17 karakter (102px) -> (128-102)/2 = 13
+            lcd.print("Odaklanma zamani!");
         }
 
         lcd.display();

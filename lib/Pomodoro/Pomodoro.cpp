@@ -172,6 +172,7 @@ namespace EMO
 
         if (the_timer.Elapsed())
         {
+            the_ui->Set_Beeper(p().Get_Beeps()); // Zamanlayıcı bittiğinde buzzer uyarısını başlat
             the_state = FINISHED;
         }
         else if (the_b2->Released())
