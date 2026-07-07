@@ -1,87 +1,80 @@
 # Zomodoro: Zeynep'in Pomodoro Zamanlayıcısı
 
-Zomodoro, kızım Zeynep için özel olarak tasarlamış bir pomodoro zamanlayıcısıdır. Bu proje, belirli aralıklarla çalışma ve dinlenme sürelerini yöneten ve Arduino Nano ile çeşitli sensörler ve 16x2 LCD ekran kullanarak zaman yönetimine yardımcı olan bir sistemdir.
+Zomodoro, kızım Zeynep için özel olarak tasarlanmış modern bir pomodoro zamanlayıcısıdır. Proje, Arduino Nano ve 16x2 LCD altyapısından **Deneyap Kart 1A v2 (ESP32-S3)** ve **SSD1306 OLED** ekran altyapısına yükseltilmiştir. Zaman yönetimi ve odaklanma becerilerini oyunlaştırarak çocuk gelişimine katkıda bulunur.
 
 ## İçindekiler
 
 - [Özellikler](#özellikler)
 - [Donanım Gereksinimleri](#donanım-gereksinimleri)
-- [Yazılım Gereksinimleri](#yazılım-gereksinimleri)
+- [Yazılım Kütüphaneleri](#yazılım-kütüphaneleri)
 - [Kurulum](#kurulum)
-- [Kullanım](#kullanım)
-- [Katkıda Bulunma](#katkıda-bulunma)
+- [Kullanım ve Kısayollar](#kullanım-ve-kısayollar)
 - [Lisans](#lisans)
-- [Demo](#demo)
+
+---
 
 ## Özellikler
 
-- **Pomodoro Tekniği:** Çalışma ve dinlenme sürelerini yöneten zamanlayıcı.
-- ~~**Low Power Modu:** Belirli bir süre işlem yapılmadığında enerji tasarrufu sağlar.~~ (kaldırıldı)
-- ~~**Hareket Sensörü:** Hareket algılandığında düşük güç modundan çıkma.~~ (kaldırıldı)
-- **Butonlarla Kontrol:** Zamanlayıcıyı başlatmak ve durdurmak için butonlar.
-- **LCD Ekran:** Zamanlayıcı durumu, süre bilgisi ve diğer bilgileri görüntüler.
-- **LDR Işık Sensörü:** LCD ekranın parlaklığını ışık seviyesine göre ayarlama.
-- **Pomodoro Sayısı:** Yapılan pomodoro sayısını kaydeder ve ekranda gösterir. Her 5 pomodoro bir kalp (❤️) eder. Pomodoro sayısı kalpler ile ilerleme çubuğu olarak LCD ekranın ikinci satırında da gösterilir.
-- **Ses Sensörü:** Zamanlayıcı esnasında ses yapılırsa (örneğin konuşulursa); LCD ekranın ikinci satırında "Sessiz olun!" yazısı çıkar ve zamanlayıcı 30 saniye durdurulur.
+- **Pomodoro Tekniği:** 20 dakika çalışma, 10 dakika kısa mola ve her 3 pomodoro seansı sonunda 30 dakika uzun mola düzenini yönetir.
+- **OLED Arayüz:** Modern grafikler, 12x12 piksel-art domates ikonu, pürüzsüz iki loblu sıvı kalp göstergesi ve damlama animasyonları.
+- **Pil Göstergesi:** Li-Po batarya seviyesini okumak için donanımsal voltaj bölücü pini (`A8`) entegre edilmiştir. Üst barda 3 kademeli (Dolu, Orta, Düşük) batarya göstergesi yer alır.
+- **LDR Parlaklık Kontrolü:** Ortam ışık seviyesine göre ekran parlaklığını otomatik olarak kısarak (`dim` modu) pil tasarrufu sağlar ve gözü yormaz.
+- **Pedagojik Kalp Ödüllendirmesi:** Tamamlanan her pomodoro seansı (20 dk) = 1 dolu küçük kalp kazanımı olarak oyunlaştırılır. Ekranda maksimum 5 adet kalp biriktirilebilir.
+- **Gelişmiş Ses Sensörü:** Donanım kesmesi (hardware interrupt) tabanlı çalışır. Sınıf veya çalışma ortamındaki gürültünün yaklaşık 2-3 saniye (25 ardışık döngü) boyunca limit eşiğini aşması durumunda tetiklenerek çalışmayı duraklatır ve buzzer ile sesli uyarı verip ekranı flaş yaparak **"SESSİZ OLUN!"** uyarısı gösterir.
+- **Buton Körlüğü:** Butonların kendi mekanik tıklama seslerinin yanlış tetiklemelere yol açmaması için buton basımlarından sonra 1.5 saniye boyunca ses algılama devre dışı bırakılır.
+
+---
 
 ## Donanım Gereksinimleri
 
-- Arduino Nano
-- 16x2 LCD Ekran
-- ~~PIR Hareket Sensörü~~ (kaldırıldı)
+- Deneyap Kart 1A v2 (ya da ESP32-S3 geliştirme kartı)
+- 128x64 SSD1306 OLED Ekran (I2C)
 - LDR (Işık Sensörü)
-- Ses Sensörü
+- Mikrofon/Ses Sensörü (Analog çıkışlı)
 - Butonlar (x2)
-- Buzzer
-- 10K Potansiyometre (LCD kontrast ayarı için)
+- Buzzer (Aktif)
+- Li-Po Batarya (3.7V)
 - Dirençler ve bağlantı kabloları
 
-## Yazılım Gereksinimleri
+---
+
+## Yazılım Kütüphaneleri
 
 - [PlatformIO](https://platformio.org/)
-- Gerekli Arduino kütüphaneleri:
-  - [LiquidCrystal](https://github.com/arduino-libraries/LiquidCrystal)
-  - ~~[Low-Power](https://github.com/rocketscream/Low-Power@1.81)~~ (kaldırıldı)
-  - ~~[PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt@1.2.9)~~ (kaldırıldı)
+- Gerekli Kütüphaneler:
+  - [Adafruit SSD1306](https://github.com/adafruit/Adafruit_SSD1306) (OLED ekran kontrolü)
+  - [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library) (Grafik kütüphanesi)
+
+---
 
 ## Kurulum
 
-1. **PlatformIO'yu Kurun:** PlatformIO'nun kurulum talimatları için [buraya](https://platformio.org/install) bakın.
-2. **Proje Klasörünü İndirin:** Bu repo'yu klonlayın veya indirin.
-   ```bash
-   git clone https://github.com/erenmustafaozdal/zomodoro.git
-   ```
-3. **Bağlantıları Yapın:** Yukarıda belirtilen donanım bileşenlerini [./doc](https://github.com/erenmustafaozdal/zomodoro/tree/master/doc) klasöründe yer alan devre şemasına göre Arduino Nano'ya bağlayın.
-   ![Devre şeması](doc/zomodoro-circuit-view.png)
-4. **PlatformIO Projesini Açın:** PlatformIO IDE'yi açın ve indirdiğiniz proje klasörünü seçin.
-5. **Kütüphaneleri Kurun:** platformio.ini dosyasındaki kütüphaneleri kurun. PlatformIO otomatik olarak eksik kütüphaneleri yükleyecektir.
-6. **Kodu Yükleyin:** Aşağıdaki komut ile kodu Arduino'ya yükleyin.
+1. **Platform Projesini Açın:** Bu repo'yu indirin ve PlatformIO IDE üzerinde açın.
+2. **Bağlantıları Yapın:** Donanım bileşenlerini aşağıdaki pin haritasına göre bağlayın:
+   - **B1 (Sol Buton):** `D0`
+   - **B2 (Sağ Buton):** `D1`
+   - **LDR (Işık Sensörü):** `A0`
+   - **Ses Sensörü (Mikrofon):** `A1`
+   - **Buzzer:** `D12`
+   - **Batarya Ölçüm:** `A8` (Deneyap Kart dahili batarya okuma pini)
+   - **OLED Ekran:** I2C pinleri (`SDA` / `SCL`)
+3. **Kodu Yükleyin:** PlatformIO üzerinden projeyi derleyin ve karta yükleyin:
    ```bash
    platformio run --target upload
    ```
 
-## Kullanım
+---
 
-- **Pomodoro Zamanlayıcıyı Başlatma:** 2. butona basarak çalışma süresini başlatın. LCD ekranda süre görünecektir. Süre bittiğinde buzzer ötecektir.
-- **Dinlenme Süresi:** Çalışma süresi tamamlandığında, yine 2. butona basarak dinlenme süresini başlatın. Süre bittiğinde buzzer daha kısa ötecektir.
-- ~~**Low Power Modu:** Hazır veya durdurulmuş durumda 1 dakika işlem yapılmazsa Zomodoro düşük güç moduna geçecektir. Hareket algıladığında veya butonlara basınca uyanarak düşük güç modundan çıkabilir.~~ (kaldırıldı)
-- **Zamanlayıcı Süreleri Arasında Geçiş Yapma:** İstenildiğinde 1. butona basarak 3 pomodoro süresi arasında geçiş yapılabilir.
-  - **Pomododo:** 20 dakika (çocuk kullanımı için çalışma süresi 25 dakikadan düşüktür)
-  - **Kısa Mola:** 10 dakika
-  - **Uzun Mola:** 30 dakika
-- **Pomodoro Sayısını Sıfırlama:** Hazır durumda 2. butona 3 saniye basılı tutulduğunda tüm pomodoro sayısı sıfırlanır.
-- **Zamanlayıcıyı Durdurma (Pause):** Zamanlayıcı esnasında 2. butona basılarak zamanlayıcı durdurulur. Yine 2. butona basarak tekrar başlatılabilir.
-- **Zamanlayıcıyı Sıfırlama:** Durdurulmuş durumda 2. butona 3 saniye basılı tutulduğunda geçerli zamanlayıcı oturumu sıfırlanır ve hazır duruma geçilir.
+## Kullanım ve Kısayollar
 
-## Katkıda Bulunma
+- **Zamanlayıcıyı Başlatma:** Hazır ekranındayken **B2 (Sağ Buton)** tuşuna basarak geri sayımı başlatın.
+- **Zamanlayıcı Modları Arasında Geçiş:** Hazır ekranındayken **B1 (Sol Buton)** tuşuna basarak Çalışma (20 dk), Kısa Mola (10 dk) ve Uzun Mola (30 dk) modları arasında geçiş yapabilirsiniz.
+- **Duraklatma (Pause):** Çalışma esnasında **B2** tuşuna basarak zamanlayıcıyı duraklatabilirsiniz. Tekrar basıldığında çalışma devam eder.
+- **Zamanlayıcıyı İptal Etme:** Duraklatılmış durumda **B2** tuşuna **3 saniye** basılı tuttuğunuzda oturum iptal edilir ve başlangıç (Hazır) ekranına dönülür.
+- **Zomodoro/Kalp Sayısını Sıfırlama (Yeni Gün Ritüeli):** Hazır ekranındayken **B2** tuşuna **3 saniye** basılı tutulduğunda kazanılan tüm kalpler sıfırlanır, EEPROM hafızası temizlenir ve kısa bir onay bipi çalar.
+- **Otomatik Ses Eşiği Kalibrasyonu:** Hazır ekranındayken **B1 ve B2** tuşlarına aynı anda **2 saniye** basılı tutulduğunda kalibrasyon modu açılır. Cihaz 3 saniye boyunca ortam gürültüsünü dinler, en yüksek gürültü seviyesini tespit edip yeni eşik limitini otomatik hesaplar ve EEPROM'a kalıcı olarak kaydeder.
 
-Katkıda bulunmak için lütfen aşağıdaki adımları izleyin:
-
-1. Bu projeyi forklayın.
-2. Kendi dalınızda _(branch)_ `(feature/AmazingFeature)` geliştirmeler yapın.
-3. Değişikliklerinizi commitleyin: `git commit -m 'Add some AmazingFeature'`.
-4. Dalınıza _(branch)_ push edin: `git push origin feature/AmazingFeature`.
-5. Bir Pull Request açın.
+---
 
 ## Lisans
 
