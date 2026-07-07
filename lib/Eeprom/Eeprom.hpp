@@ -13,6 +13,10 @@ namespace EMO
     class Eeprom : public Eeprom_IF
     {
     public:
+        Eeprom();
+
+        virtual void Setup() override;
+
         /// Belirtilen EEPROM adresinden bir bayt okur.
         virtual uint8_t Read(int a_addr) const
         {
@@ -23,6 +27,7 @@ namespace EMO
         virtual void Write(int a_addr, uint8_t a_value)
         {
             EEPROM.write(a_addr, a_value);
+            EEPROM.commit(); // ESP32 için yazmayı flaşa kaydet
         }
     };
 }

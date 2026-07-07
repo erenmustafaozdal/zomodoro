@@ -15,6 +15,9 @@ namespace EMO
         /// Sanal yıkıcı, bu sınıftan türetileceğiz.
         virtual ~Eeprom_IF() {}
 
+        /// EEPROM kurulumunu gerçekleştirir.
+        virtual void Setup() = 0;
+
         /// Belirtilen EEPROM adresinden bir bayt okur.
         virtual uint8_t Read(int a_addr) const = 0;
 

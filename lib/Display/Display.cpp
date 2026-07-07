@@ -1,12 +1,12 @@
 #include <stdarg.h>
 #include <Arduino.h>
+#include <Wire.h>
 #include "Display.hpp"
 #include "Const.hpp"
 
 namespace EMO
 {
-    Display::Display() : the_lcd(Const::PIN_RS, Const::PIN_ENABLE,
-                                 Const::PIN_D4, Const::PIN_D5, Const::PIN_D6, Const::PIN_D7)
+    Display::Display() : the_lcd(128, 64, &Wire, -1)
     {
         for (uint8_t i = 0; i < MAX_LINES; ++i)
             memset(the_old_line[i], 0, BUF_SIZE);
@@ -16,21 +16,29 @@ namespace EMO
 
     void Display::Setup()
     {
-        the_lcd.begin(MAX_CHARS, MAX_LINES);             // 16x2 formatında başlat
-        pinMode(EMO::Const::PIN_LCD_BRIGHTNESS, OUTPUT); // PWM pini kullanır
-        pinMode(EMO::Const::PIN_LCD_CONTRAST, OUTPUT);   // PWM pini kullanır
+        Wire.begin();
 
-        // 80/255 duty cycle PWM verir
-        analogWrite(EMO::Const::PIN_LCD_BRIGHTNESS, EMO::Const::LCD_MIN_BRIGHTNESS);
-
-        analogWrite(EMO::Const::PIN_LCD_CONTRAST, 128);
+        // Deneyap OLED varsayılan adresi 0x7A (7-bit adresi 0x3D) veya ADR kısa devreyle 0x78 (0x3C)'dir.
+        if(!the_lcd.begin(SSD1306_SWITCHCAPVCC, 0x3D)) {
+            if(!the_lcd.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+                Serial.println(F("SSD1306 OLED ekran başlatılamadı!"));
+                return;
+            }
+        }
+        
+        the_lcd.clearDisplay();
+        the_lcd.setTextSize(1); // Okunabilir olması için yazı tipi boyutu
+        the_lcd.setTextColor(SSD1306_WHITE);
+        the_lcd.setCursor(0, 0);
+        the_lcd.println("Zomodoro");
+        the_lcd.display();
     }
 
     // -------------------------------------------------------------------------
 
     void Display::Setup_Char(uint8_t a_char, uint8_t *a_matrix)
     {
-        the_lcd.createChar(a_char, a_matrix);
+        // OLED için custom karakter yüklemeye gerek yok, stub yapıldı
     }
 
     // -------------------------------------------------------------------------
@@ -62,9 +70,8 @@ namespace EMO
 
         int written = vsnprintf(the_buf, BUF_SIZE, a_format, a_vl);
 
-        if (written >= 0) // Karakter yazmasak bile - hala satırı temizleriz
+        if (written >= 0)
         {
-            // Kalan kısmı boşluklarla doldur
             for (int i = written; i < MAX_CHARS; ++i)
                 the_buf[i] = ' ';
             the_buf[MAX_CHARS] = 0;
@@ -76,9 +83,18 @@ namespace EMO
 
         if (strcmp(the_buf, the_old_line[a_y]) != 0)
         {
-            the_lcd.setCursor(0, a_y);
-            the_lcd.print(the_buf);
             memcpy(the_old_line[a_y], the_buf, BUF_SIZE);
+            
+            the_lcd.clearDisplay();
+            // 1. Satır
+            the_lcd.setCursor(0, 8);
+            the_lcd.print(the_old_line[0]);
+            // 2. Satır
+            the_lcd.setCursor(0, 32);
+            the_lcd.print(the_old_line[1]);
+            the_lcd.display();
+            
+            Serial.println(the_buf);
         }
     }
 }

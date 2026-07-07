@@ -2,11 +2,11 @@
 #define __DISPLAY_HPP__
 
 #include <stdint.h>
-#include <LiquidCrystal.h>
+#include <Adafruit_SSD1306.h>
 
 namespace EMO
 {
-    /** 16x2 LCD ekrana yazmak için sarmalayıcı sınıf.
+    /** 128x64 OLED ekrana yazmak için sarmalayıcı sınıf (Geçici Stub).
      *
      * LCD ekrana bir şeyler yazmak için printf(...) gibi herhangi bir sayıda argümanla Write() çağırmayı sağlar.
      * Bir versiyonu x ve y başlangıç konumu alır. Diğeri sadece y (yani satır) alır.
@@ -38,10 +38,13 @@ namespace EMO
         /// (0, a_y) konumunda bir dize yazar.
         void Write(uint8_t a_y, const char *a_format, ...);
 
+        /// OLED ekran nesnesine erişim sağlar
+        Adafruit_SSD1306& GetLcd() { return the_lcd; }
+
     private:
         void write(uint8_t a_x, uint8_t a_y, const char *a_format, va_list &a_vl);
 
-        LiquidCrystal the_lcd;
+        Adafruit_SSD1306 the_lcd;
         char the_buf[BUF_SIZE];                 //!< Geçici tampon.
         char the_old_line[MAX_LINES][BUF_SIZE]; //!< Eski dizeler.
     };
