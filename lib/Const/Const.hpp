@@ -49,9 +49,9 @@ namespace EMO
         static const uint8_t POM_BREAK_SHORT_MIN = 10;
         static const uint8_t POM_BREAK_LONG_MIN = 30;
 
-        static const uint8_t POM_WORK_BEEPS = 11;
-        static const uint8_t POM_BREAK_SHORT_BEEPS = 5;
-        static const uint8_t POM_BREAK_LONG_BEEPS = 7;
+        static const uint8_t POM_WORK_BEEPS = 10;
+        static const uint8_t POM_BREAK_SHORT_BEEPS = 10;
+        static const uint8_t POM_BREAK_LONG_BEEPS = 10;
 
         // Pomodoroları kaydetmek için eeprom adresi
         static const int POM_SAVE_ADDRESS = 0;
