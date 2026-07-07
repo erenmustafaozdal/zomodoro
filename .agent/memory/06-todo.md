@@ -21,6 +21,10 @@ Durum sütunu: `[ ]` yapılmadı, `[~]` devam ediyor, `[x]` tamamlandı.
 | (her PR) | 13 | Mimari koruma | `Pomodoro.cpp`'ye dokunulmadığını doğrula (yalnızca UI/Display katmanı değişti) | — | — |
 | [ ] | 14 | Kamera ile odak/varlık tespiti | İleri özellik — kapsam: "yüz kare içinde var mı" (basit varlık tespiti, tam dikkat analizi DEĞİL) | (yeni modül, henüz yok) | Düşük/Backlog |
 | [x] | 15 | Proje adı | Kapandı — Zomodoro kalıyor | — | — |
+| [ ] | 16 | Li-Po Pil Tasarrufu ve Uyku Modu | Boşta kalındığında OLED ekranın söndürülmesi ve ESP32'nin Light/Deep Sleep moduna alınması | `src/main.cpp`, `lib/Pomodoro/*` | Orta |
+| [ ] | 17 | Wi-Fi ve Web İstatistik Arayüzü | Tamamlanan Pomodoro istatistiklerinin yerel Wi-Fi ağı üzerinden veli web paneline aktarılması | (yeni modül) | Düşük/Backlog |
+| [ ] | 18 | Kalibrasyon Eşiğinin Kalıcı Olması | Otomatik ses kalibrasyon eşiğinin EEPROM'a kaydedilip her açılışta yüklenmesi | `lib/Eeprom/*`, `lib/Pomodoro/*` | Orta |
+| [ ] | 19 | Günlük Hedef ve Başarı Ekranı | Günlük hedefe (örn. 4 Pomodoro) ulaşıldığında özel tebrik ekranı ve ses ritmi | `lib/UI/*` | Orta |
 
 ## Notlar
 
