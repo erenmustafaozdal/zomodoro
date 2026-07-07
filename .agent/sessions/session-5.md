@@ -10,6 +10,7 @@
 - `lib/UI/UI.cpp` — 
   - Mola türünün `KISA MOLA` veya `UZUN MOLA` olarak tespit edildiği mantık `10` gibi sihirli/sabit sayılar yerine dinamik olarak `Const::POM_BREAK_SHORT_MIN` referansı ile karşılaştırılarak güncellendi. Bu sayede test sürelerindeyken de mola başlıkları ve sayaçlar tam uyumlu çalışmaktadır.
   - "POMODORO BITTi!" (x=19), "Aferin sana Zeynep!" (x=7), "Mola Bitti!" (x=31) ve "Calisma zamani!" yerine güncellenen "Odaklanma zamani!" (x=13) yazıları piksel bazlı font genişliklerine göre hesaplanarak tam ortalandı ve ekrana sığmama sorunu giderildi.
+  - `heart_filled` (dolu kalp) ikonunun alt sıralarındaki (satır 23 ve 25) piksel tanımlarındaki hatalı boşluklar dolduruldu. Kalbin dolumu esnasında alt kısımlarda oluşan yatay çizgi şeklindeki boşluklar (yarıklar) tamamen giderildi.
   - Kalp içi dolum ekranındaki düşen su damlası animasyonunun kalbin dışına taşarak aşağı sarkması engellendi; damlanın kalbin alt ucu hizasında (y=26) sönmesi sağlandı.
 
 ### Yeni kararlar
