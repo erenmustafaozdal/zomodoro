@@ -20,6 +20,7 @@ uint32_t the_time = 0;
 
 void setup()
 {
+  the_eeprom.Setup();
   the_b1.Setup();
   the_b2.Setup();
   the_pomodoro.Setup();
@@ -34,7 +35,8 @@ void loop()
   the_ui.UpdateBrightness(the_time);
   the_b1.Update(the_time);
   the_b2.Update(the_time);
+  soundSensor.Update(the_time);
   the_pomodoro.Run(the_time);
 
-  delay(100);
+  delay(20);
 }
