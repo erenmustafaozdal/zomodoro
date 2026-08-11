@@ -101,6 +101,7 @@ namespace EMO
         uint32_t the_pause_time;
         uint32_t the_duration;
         uint32_t the_sound_pause_time;
+        uint32_t the_last_sound_pause_end_time;
         uint32_t the_calib_start_time;
         uint16_t the_max_detected_noise;
         uint32_t the_last_button_activity_time;

@@ -16,6 +16,7 @@ namespace EMO
         void SetThreshold(uint16_t threshold) { soundThreshold = threshold; }
         uint16_t GetThreshold() const { return soundThreshold; }
         uint16_t GetLastSampleCount() const { return lastSampleCount; }
+        uint16_t GetNoiseFloor() const { return noiseFloor; }
 
     private:
         uint8_t pin;
@@ -25,6 +26,7 @@ namespace EMO
         unsigned long lastWindowTime;
         uint16_t currentSampleCount;
         uint16_t lastSampleCount;
+        uint16_t noiseFloor;
         bool soundDetected;
     };
 }

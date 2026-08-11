@@ -17,8 +17,7 @@ Zomodoro, kızım Zeynep için özel olarak tasarlanmış modern bir pomodoro za
 
 - **Pomodoro Tekniği:** 20 dakika çalışma, 10 dakika kısa mola ve her 3 pomodoro seansı sonunda 30 dakika uzun mola düzenini yönetir.
 - **OLED Arayüz:** Modern grafikler, 12x12 piksel-art domates ikonu, pürüzsüz iki loblu sıvı kalp göstergesi ve damlama animasyonları.
-- **Pil Göstergesi:** Li-Po batarya seviyesini okumak için donanımsal voltaj bölücü pini (`A8`) entegre edilmiştir. Üst barda 3 kademeli (Dolu, Orta, Düşük) batarya göstergesi yer alır.
-- **LDR Parlaklık Kontrolü:** Ortam ışık seviyesine göre ekran parlaklığını otomatik olarak kısarak (`dim` modu) pil tasarrufu sağlar ve gözü yormaz.
+- **LDR Parlaklık Kontrolü:** Ortam ışık seviyesine göre ekran parlaklığını otomatik olarak kısarak (`dim` modu) güç tasarrufu sağlar ve gözü yormaz.
 - **Pedagojik Kalp Ödüllendirmesi:** Tamamlanan her pomodoro seansı (20 dk) = 1 dolu küçük kalp kazanımı olarak oyunlaştırılır. Ekranda maksimum 5 adet kalp biriktirilebilir.
 - **Gelişmiş Ses Sensörü:** Donanım kesmesi (hardware interrupt) tabanlı çalışır. Sınıf veya çalışma ortamındaki gürültünün yaklaşık 2-3 saniye (25 ardışık döngü) boyunca limit eşiğini aşması durumunda tetiklenerek çalışmayı duraklatır ve buzzer ile sesli uyarı verip ekranı flaş yaparak **"SESSİZ OLUN!"** uyarısı gösterir.
 - **Buton Körlüğü:** Butonların kendi mekanik tıklama seslerinin yanlış tetiklemelere yol açmaması için buton basımlarından sonra 1.5 saniye boyunca ses algılama devre dışı bırakılır.
@@ -30,10 +29,9 @@ Zomodoro, kızım Zeynep için özel olarak tasarlanmış modern bir pomodoro za
 - Deneyap Kart 1A v2 (ya da ESP32-S3 geliştirme kartı)
 - 128x64 SSD1306 OLED Ekran (I2C)
 - LDR (Işık Sensörü)
-- Mikrofon/Ses Sensörü (Analog çıkışlı)
+- Mikrofon/Ses Sensörü (Analog/Dijital çıkışlı)
 - Butonlar (x2)
 - Buzzer (Aktif)
-- Li-Po Batarya (3.7V)
 - Dirençler ve bağlantı kabloları
 
 ---
@@ -56,7 +54,6 @@ Zomodoro, kızım Zeynep için özel olarak tasarlanmış modern bir pomodoro za
    - **LDR (Işık Sensörü):** `A0`
    - **Ses Sensörü (Mikrofon):** `A1`
    - **Buzzer:** `D12`
-   - **Batarya Ölçüm:** `A8` (Deneyap Kart dahili batarya okuma pini)
    - **OLED Ekran:** I2C pinleri (`SDA` / `SCL`)
 3. **Kodu Yükleyin:** PlatformIO üzerinden projeyi derleyin ve karta yükleyin:
    ```bash

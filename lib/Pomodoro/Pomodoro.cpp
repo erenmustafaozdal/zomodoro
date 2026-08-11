@@ -20,10 +20,10 @@ namespace EMO
                                       the_eeprom(a_eeprom),
                                       the_soundSensor(a_soundSensor),
 
-
                                       the_pause_time(0),
                                       the_duration(0),
                                       the_sound_pause_time(0),
+                                      the_last_sound_pause_end_time(0),
                                       the_calib_start_time(0),
                                       the_max_detected_noise(0),
                                       the_last_button_activity_time(0),
@@ -61,10 +61,11 @@ namespace EMO
         // EEPROM boş değilse ve 450'den büyükse eşiği uygula (klavye tıkırtısı > 350 olduğundan min 450 yapıyoruz)
         if (saved_threshold >= 450 && saved_threshold < 65535) {
             the_soundSensor->SetThreshold(saved_threshold);
-            Utils::debug("Kayitli ses esigi yuklendi: %u", saved_threshold);
+            Serial.print("[SES] Kayitli ses esigi EEPROM'dan yuklendi: ");
+            Serial.println(saved_threshold);
         } else {
             the_soundSensor->SetThreshold(450);
-            Utils::debug("Varsayilan guvenli ses esigi kullaniliyor: 450");
+            Serial.println("[SES] Varsayilan guvenli ses esigi kullaniliyor: 450");
         }
     }
 
@@ -174,39 +175,47 @@ namespace EMO
         {
             the_ui->Set_Beeper(p().Get_Beeps()); // Zamanlayıcı bittiğinde buzzer uyarısını başlat
             the_state = FINISHED;
+            Serial.println("[POMODORO] Sure doldu! FINISHED durumuna gecildi.");
         }
         else if (the_b2->Released())
         {
             the_state = PAUSED;
+            Serial.println("[POMODORO] Kullanici tarafindan duraklatildi (PAUSED).");
         }
         else
         {
-            // Butona basıldıktan sonra 1.5 saniye ses kontrolü yapma (klik sesini filtrele)
-            if (the_timer_type == T_POM20 && (a_time - the_last_button_activity_time > 1500))
+            // Butona basıldıktan sonra 1.5 saniye VE 30s duraklatmadan sonra 3 saniye ses kontrolü yapma (cooldown)
+            bool button_cooldown = (a_time - the_last_button_activity_time <= 1500);
+            bool sound_cooldown  = (a_time - the_last_sound_pause_end_time <= 3000);
+
+            if (the_timer_type == T_POM20 && !button_cooldown && !sound_cooldown)
             {
                 if (the_soundSensor->IsSoundDetected())
                 {
                     if (the_sound_trigger_count < 25)
                         the_sound_trigger_count++;
 
-                    // Her 5 döngüde bir seri porta durum yazdır
+                    // Her 5 birikmede bir detaylı Seri Port Log yazdır
                     if (the_sound_trigger_count % 5 == 0)
                     {
-                        Serial.print("Gurultu sayaci: ");
+                        Serial.print("[SES LOG] Gurultu Sayaci: ");
                         Serial.print(the_sound_trigger_count);
-                        Serial.print("/25, Darbe: ");
+                        Serial.print("/25 | Anlik Darbe: ");
                         Serial.print(the_soundSensor->GetLastSampleCount());
-                        Serial.print(", Limit: ");
+                        Serial.print(" | Taban Gurultusu: ");
+                        Serial.print(the_soundSensor->GetNoiseFloor());
+                        Serial.print(" | Esik: ");
                         Serial.println(the_soundSensor->GetThreshold());
                     }
 
                     // En az 25 yoğun pencerede gürültü olmalı (gerçek sürede ~2 saniyeye denk gelir)
                     if (the_sound_trigger_count >= 25)
                     {
-                        Serial.print("Gurultu dogrulandi! Darbe: ");
+                        Serial.print("[SES ALGILANDI] Limit asildi! Anlik Darbe: ");
                         Serial.print(the_soundSensor->GetLastSampleCount());
-                        Serial.print(", Limit: ");
+                        Serial.print(" | Esik: ");
                         Serial.println(the_soundSensor->GetThreshold());
+                        Serial.println("[POMODORO] 30 saniyelik duraklatma uyarisi (SOUND_DETECTED) baslatiliyor...");
 
                         the_ui->Set_Beeper(1); // Ses uyarısı başladığında kısa bip sesi çıkar
                         the_state = SOUND_DETECTED;
@@ -216,8 +225,11 @@ namespace EMO
                 }
                 else
                 {
-                    if (the_sound_trigger_count > 0)
-                        the_sound_trigger_count--;
+                    // Gürültü bittiğinde sayacı daha hızlı düşür (1 yerine 2 eksilt)
+                    if (the_sound_trigger_count >= 2)
+                        the_sound_trigger_count -= 2;
+                    else
+                        the_sound_trigger_count = 0;
                 }
             }
             else
@@ -271,6 +283,7 @@ namespace EMO
                 reset_timer();
                 the_state = READY;
                 the_b2->Reset();
+                Serial.println("[POMODORO] Oturum iptal edildi. READY durumuna donuldu.");
             }
         }
         // b2 kapalı
@@ -280,6 +293,7 @@ namespace EMO
             {
                 continue_timer();
                 the_state = RUNNING;
+                Serial.println("[POMODORO] Oturum yeniden baslatildi (RUNNING).");
             }
         }
     }
@@ -288,8 +302,26 @@ namespace EMO
     {
         the_ui->Show_Paused(*this, true);
 
-        if (a_time - the_sound_pause_time >= 30000) // 30 saniye bekleme
+        uint32_t elapsed = a_time - the_sound_pause_time;
+
+        // Her 5 saniyede bir Serial log ile kalan süreyi bildir
+        static uint32_t last_log_sec = 999;
+        uint32_t current_sec = elapsed / 1000;
+        if (current_sec != last_log_sec && current_sec % 5 == 0)
         {
+            last_log_sec = current_sec;
+            Serial.print("[POMODORO] Ses Uyarisi Duraklatmasi: ");
+            Serial.print(30 - current_sec);
+            Serial.println(" saniye kaldi...");
+        }
+
+        if (elapsed >= 30000) // 30 saniye bekleme
+        {
+            Serial.println("[POMODORO] 30 saniyelik duraklatma bitti. 3 saniyelik soguma (cooldown) baslatiliyor.");
+            the_last_sound_pause_end_time = a_time;
+            the_sound_trigger_count = 0;
+            last_log_sec = 999;
+
             // Timer'ı devam ettir
             the_state = RUNNING;
             continue_timer();
@@ -311,8 +343,8 @@ namespace EMO
 
         if (elapsed >= 3000) // 3 saniye örnekleme yap
         {
-            // Eşik değerini belirle: daha güvenli olması için maks gürültü * 2 + 15 tolerans
-            uint16_t new_threshold = the_max_detected_noise * 2 + 15;
+            // Eşik değerini belirle: daha güvenli olması için maks gürültü * 2 + 30 tolerans
+            uint16_t new_threshold = the_max_detected_noise * 2 + 30;
             
             // Yanlış tetiklenmeyi önlemek için minimum sınırı 450 yapalım (klavye tıkırtılarını eler)
             if (new_threshold < 450) {
@@ -325,7 +357,11 @@ namespace EMO
             the_eeprom->Write(Const::SOUND_THRESHOLD_ADDR_HIGH, (new_threshold >> 8) & 0xFF);
             the_eeprom->Write(Const::SOUND_THRESHOLD_ADDR_LOW, new_threshold & 0xFF);
 
-            Utils::debug("Yeni gurultu esigi kaydedildi: %u (max gurultu: %u)", new_threshold, the_max_detected_noise);
+            Serial.print("[KALIBRASYON] Yeni ses esigi EEPROM'a kaydedildi: ");
+            Serial.print(new_threshold);
+            Serial.print(" (Maksimum Algilanan Gurultu: ");
+            Serial.print(the_max_detected_noise);
+            Serial.println(")");
 
             // READY durumuna dön
             the_state = READY;
