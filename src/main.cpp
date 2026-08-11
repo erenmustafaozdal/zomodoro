@@ -20,7 +20,7 @@ uint32_t the_time = 0;
 
 void setup()
 {
-  analogReadResolution(10); // ESP32 ADC çözünürlüğünü 10-bit (0-1023) yap (LDR ve Pil okuma uyumu için)
+  analogReadResolution(10); // ESP32 ADC çözünürlüğünü 10-bit (0-1023) yap (LDR okuma uyumu için)
   the_eeprom.Setup();
   the_b1.Setup();
   the_b2.Setup();

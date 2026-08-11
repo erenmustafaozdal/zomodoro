@@ -472,9 +472,6 @@ namespace EMO
         lcd.setCursor(4, 4);
         lcd.print("ZOMODORO");
 
-        // Orta kısım: Pil göstergesi
-        drawBattery(76, 4);
-
         // Sağ taraf: Domates İkonu + Pomodoro Sayısı
         drawTomato(96, 1);
         lcd.setCursor(110, 4);
@@ -483,34 +480,5 @@ namespace EMO
 
         // Yatay Ayırıcı Çizgi
         lcd.drawFastHLine(0, 14, 128, SSD1306_WHITE);
-    }
-
-    void UI::drawBattery(int16_t x, int16_t y)
-    {
-        Adafruit_SSD1306 &lcd = the_display.GetLcd();
-        
-        // Pil voltajını oku (A8 batarya voltaj bölücüsüne bağlı)
-        uint16_t val = analogRead(A8);
-        
-        // Pil dış gövdesi (12x7 piksel)
-        lcd.drawRect(x, y, 12, 7, SSD1306_WHITE);
-        // Pil başı (+ kutbu)
-        lcd.drawFastVLine(x + 12, y + 2, 3, SSD1306_WHITE);
-        
-        // Voltaj seviyesine göre barları doldur (10-bit üzerinden: dolu ~650, kritik ~500)
-        if (val >= 600) {
-            // Dolu (3 bar)
-            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
-            lcd.fillRect(x + 5, y + 2, 2, 3, SSD1306_WHITE);
-            lcd.fillRect(x + 8, y + 2, 2, 3, SSD1306_WHITE);
-        } else if (val >= 550) {
-            // Orta (2 bar)
-            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
-            lcd.fillRect(x + 5, y + 2, 2, 3, SSD1306_WHITE);
-        } else if (val >= 510) {
-            // Düşük (1 bar)
-            lcd.fillRect(x + 2, y + 2, 2, 3, SSD1306_WHITE);
-        }
-        // val < 510 ise boş kalacaktır
     }
 }
